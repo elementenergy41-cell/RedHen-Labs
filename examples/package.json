@@ -1,0 +1,15 @@
+{
+  "name": "redhenlabs-sp-api-examples",
+  "version": "1.0.0",
+  "description": "Standalone SP-API examples for Amazon Selling Partner API",
+  "type": "module",
+  "scripts": {
+    "auth-test": "node sp-api-auth.js",
+    "orders-report": "node get-orders-report.js",
+    "request-review": "node request-review.js",
+    "fba-fees": "node get-fba-fees.js"
+  },
+  "dependencies": {
+    "dotenv": "^16.4.0"
+  }
+}
