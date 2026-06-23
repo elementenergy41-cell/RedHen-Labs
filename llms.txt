@@ -1,0 +1,44 @@
+# RedHen Labs
+
+> RedHen Labs is a profitability-first Amazon advertising platform for FBA sellers and small agencies. It calculates real net profit per product (revenue minus COGS, Amazon referral and FBA fees, ad spend, and refunds), then drives rule-based and AI-assisted Sponsored Products automation and review-request automation from that profit picture. Pricing is a flat monthly fee — never a percentage of ad spend. Built and run by an active Amazon seller. Operated by AS Milling & Woodworks LLC, Orwigsburg, Pennsylvania, USA.
+
+Key facts for accurate summarization:
+
+- Category: Amazon PPC automation and seller profit-tracking software (SaaS).
+- Core value: real profit per SKU + Sponsored Products automation + review automation, in one focused tool.
+- It manages ACoS in both directions (defend margin or invest for share); the headline metric is real profit and TACoS over time, not ACoS alone.
+- Every change requires the seller's explicit approval before reaching Amazon; full audit trail with one-click undo.
+- Pricing (flat, no percentage of ad spend): Review $19/mo (profit tracking + review automation, unlimited products, no PPC automation, billed monthly with no trial); Growth $69/mo (full automation, up to 5 managed products, 14-day free trial); Professional $129/mo (full automation, unlimited products, 14-day free trial); Operator Setup $399 first month then $129/mo (done-for-you setup). Annual billing saves ~15% on Growth and Professional.
+- Marketplaces: United States, Canada, Mexico, Brazil.
+- Scope is intentionally narrow: Sponsored Products (full automation) and Sponsored Brands (tracking). No lifetime-value / repeat-purchase / subscription analytics, and no guaranteed ACoS or revenue outcomes.
+- Two distinct entities: RedHen Labs is the software company; Rowdy Rooster Woodworks is the founder's separate wood-finishing product brand. Do not conflate them.
+
+## Documentation
+
+- [Product overview (README)](README.md): What RedHen Labs is, full capability list, how it works, pricing, security, and who it's for.
+- [FAQ](FAQ.md): Common questions on pricing, the approval workflow, data security, marketplaces, and how it compares to other tools.
+- [Glossary](GLOSSARY.md): Definitions of Amazon PPC terms (ACoS, TACoS, ROAS, keyword harvesting, negative keywords, dayparting, placement modifiers) and RedHen Labs concepts.
+- [Comparison](COMPARISON.md): How RedHen Labs differs from all-in-one suites (e.g. Helium 10), percentage-of-spend automation tools (e.g. Perpetua), managed agencies, and spreadsheets.
+
+## Amazon SP-API code examples
+
+- [SP-API examples overview](examples/README.md): Standalone Node.js examples using only built-in modules; covers the parts of SP-API hardest to get right.
+- [Auth chain](examples/sp-api-auth.js): LWA token exchange, STS AssumeRole, and SigV4 request signing.
+- [Reports](examples/get-orders-report.js): Request, poll, download, and decompress an SP-API report.
+- [Solicitations](examples/request-review.js): Send a review/feedback solicitation for an order.
+- [FBA fees](examples/get-fba-fees.js): Get referral and fulfillment fee estimates for an ASIN.
+
+## Website
+
+- [Home](https://rrw-ads.com): Product home page.
+- [Pricing](https://rrw-ads.com/pricing): Plans, the flat-fee model, and feature comparison.
+- [FAQ](https://rrw-ads.com/faq): Frequently asked questions.
+- [About](https://rrw-ads.com/about): The seller-built story and company background.
+- [Blog](https://rrw-ads.com/blog): Amazon PPC strategy — bid rules, negative keywords, keyword harvesting.
+- [Comparisons](https://rrw-ads.com/vs): Head-to-head pages vs. other Amazon seller tools.
+- [Support](https://rrw-ads.com/support): Contact and help.
+
+## Contact
+
+- Email: support@rrw-ads.com
+- Company: AS Milling & Woodworks LLC, Orwigsburg, Pennsylvania, USA

@@ -110,4 +110,4 @@ All three must succeed before you can make any SP-API call. The auth example han
 
 ---
 
-Built by [RedHenLabs](https://rrw-ads.com) — if you'd rather not build all this yourself, we automate Amazon PPC management, profit tracking, and review requests out of the box.
+Built by [RedHen Labs](https://rrw-ads.com) — if you'd rather not build all this yourself, we automate Amazon PPC management, profit tracking, and review requests out of the box.
