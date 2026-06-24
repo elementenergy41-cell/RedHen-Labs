@@ -93,7 +93,7 @@ Flat monthly rates. **Never a percentage of your ad spend.** Your price is the s
 | Plan | Price | Trial | Best for | Highlights |
 |------|-------|-------|----------|------------|
 | **Review** | **$19/mo** | Billed monthly, no trial | Sellers who want profit clarity + reviews, without ad automation | Real profit per product (COGS + fees), **unlimited products tracked**, automated review requests, orders & inventory data, US/CA/MX/BR |
-| **Growth** | **$69/mo** (~$58/mo annual) | 14-day free trial, no card | New and small sellers who want full automation on a focused catalog | Everything in Review + **up to 5 fully-managed products**, AI & structured campaign wizards, AI recommendations, harvesting, negatives, rule-based bid automation |
+| **Growth** | **$69/mo** (~$58/mo annual) | 14-day free trial, no card | Small, focused catalogs that want full automation | Everything in Review + **up to 5 fully-managed products**, AI & structured campaign wizards, AI recommendations, harvesting, negatives, rule-based bid automation |
 | **Professional** | **$129/mo** (~$110/mo annual) | 14-day free trial, no card | Established sellers managing many products | Everything in Growth, **unlimited products**, campaign chaining with keyword isolation, full audit trail + one-click undo, budget & placement automation |
 | **Operator Setup** | **$399 first month, then $129/mo** | Done-for-you | Sellers who want the system built for them | Everything in Professional + done-for-you campaign architecture, rule and profit-model configuration, and a written 30-day operating runbook |
 
