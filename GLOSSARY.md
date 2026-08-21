@@ -66,7 +66,7 @@ Plain-language definitions of the Amazon advertising and seller-profitability te
 
 **Placement modifiers** — Percentage bid boosts for specific ad placements (top-of-search, rest-of-search, product pages) where performance differs.
 
-**Dayparting** — Adjusting bids or budgets by time of day or day of week based on when conversions happen.
+**Dayparting** — Adjusting bids or budgets by time of day or day of week based on when conversions happen. RedHen Labs supports bid dayparting on the Professional plan (in beta): you set the windows, and the original bid is restored automatically when a window closes.
 
 **Target ACoS** — The advertising cost of sales you're aiming for on a product, set relative to its break-even point and your profit goal. RedHen Labs supports a different target per product.
 

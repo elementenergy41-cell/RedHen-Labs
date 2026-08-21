@@ -42,6 +42,7 @@ You stay in control. Every change is surfaced for approval before it reaches Ama
 - **Placement bid modifiers** — optimize top-of-search and product-page placements
 - **Inventory-aware guards** — reduce or pause bids when FBA stock runs low
 - **Scheduling** — run automations daily, weekly, or on custom intervals
+- **Dayparting (beta)** — raise or reduce bids by hour of day and day of week, on a schedule you set, with the original bid restored automatically when the window closes
 - **Template library** — pre-built automation strategies you can adopt and tune
 
 ### AI-Assisted Optimization (a supporting tool, not the product)
