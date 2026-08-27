@@ -26,7 +26,7 @@ It does not offer lifetime-value, repeat-purchase, or subscription analytics, an
 
 ### How much does RedHen Labs cost?
 Flat monthly pricing, never a percentage of ad spend:
-- **Review — $19/mo:** real profit per product, unlimited products tracked, automated review requests. No PPC automation. Billed monthly, no free trial.
+- **Review — $19/mo:** real profit per product, unlimited products tracked, automated review requests. No PPC automation. 14-day free trial.
 - **Growth — $69/mo (~$58/mo annual, $704/yr):** everything in Review plus full Sponsored Products data, AI recommendations with reasoning, campaign wizards, and search-term and negative-keyword suggestions. Unlimited products. Nothing reaches Amazon without your approval. 14-day free trial.
 - **Professional — $129/mo (~$110/mo annual, $1,321/yr):** everything in Growth, and the automation may run **unattended** — rule-based bid automation, budget and placement automations, dayparting (beta), campaign chaining with keyword isolation, and the AI assistant. Full audit trail with one-click undo. 14-day free trial.
 - **Operator Setup — $399 first month, then $129/mo:** done-for-you setup plus a written 30-day operating runbook.
@@ -34,7 +34,7 @@ Flat monthly pricing, never a percentage of ad spend:
 **Every paid plan tracks unlimited products.** The difference between Growth and Professional is *autonomy* — whether the platform waits for your approval or acts on its own — not how many products you can manage.
 
 ### What's included in the $19 Review plan?
-Real profit per product (after COGS, fees, ad spend, and returns), unlimited product tracking, and automated Amazon review requests. It is billed monthly with no free trial. It does **not** include PPC features — for AI recommendations and campaign wizards, upgrade to Growth ($69/mo); for automation that runs unattended, Professional ($129/mo).
+Real profit per product (after COGS, fees, ad spend, and returns), unlimited product tracking, and automated Amazon review requests. It includes a 14-day free trial, then $19/mo. It does **not** include PPC features — for AI recommendations and campaign wizards, upgrade to Growth ($69/mo); for automation that runs unattended, Professional ($129/mo).
 
 ### Do you charge a percentage of my ad spend?
 No, ever. Your price is flat whether you spend $5k or $500k per month on ads. Most PPC tools and agencies take a percentage; RedHen Labs does not, because its job is to reduce wasted spend, not profit from your scale.
@@ -46,10 +46,10 @@ Agencies typically charge a flat retainer of $1,000–$2,500/mo, or a base fee p
 On a percentage-of-spend model, a seller at that revenue can easily pay $500–$2,000+ per month as ad budgets scale. RedHen Labs stays at $129/mo flat at any spend level, so your cost doesn't climb with your budget — the savings grow as you scale.
 
 ### Is there a free trial?
-Yes — Growth and Professional include a 14-day free trial. **A card is required to start**, but you pay $0 today and can cancel anytime before day 14 at no charge. The $19 Review plan is billed monthly from day one (no trial).
+Yes — **all three plans include a 14-day free trial**. **A card is required to start**, but you pay $0 today and can cancel anytime before day 14 at no charge.
 
 ### What happens after my 14-day trial?
-Your card on file is charged the plan's monthly rate on day 14 and the subscription renews monthly from there. You can cancel anytime before day 14 at no charge, and anytime afterwards to stop the next renewal. Cancelling does not delete your data — you can pick up where you left off.
+Your card on file is charged your plan price (Review $19 / Growth $69 / Professional $129) on day 14 and the subscription renews monthly from there. You can cancel anytime before day 14 at no charge, and anytime afterwards to stop the next renewal. Cancelling does not delete your data — you can pick up where you left off.
 
 ### Can I switch plans later?
 Yes. Upgrade or downgrade anytime from your account settings; changes take effect on your next billing cycle.

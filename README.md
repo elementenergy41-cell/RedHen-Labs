@@ -93,13 +93,13 @@ Flat monthly rates. **Never a percentage of your ad spend.** Your price is the s
 
 | Plan | Price | Trial | Best for | Highlights |
 |------|-------|-------|----------|------------|
-| **Review** | **$19/mo** | Billed monthly, no trial | Sellers who want profit clarity + reviews, without ad automation | Real profit per product (COGS + fees), **unlimited products tracked**, automated review requests, orders & inventory data, US/CA/MX/BR |
+| **Review** | **$19/mo** | 14-day free trial, card required | Sellers who want profit clarity + reviews, without ad automation | Real profit per product (COGS + fees), **unlimited products tracked**, automated review requests, orders & inventory data, US/CA/MX/BR |
 | **Growth** | **$69/mo** (~$58/mo annual, $704/yr) | 14-day free trial, card required | Sellers who want the analysis but want to stay in the loop | Everything in Review + full Sponsored Products data, AI & structured campaign wizards, AI recommendations with reasoning, search-term & negative suggestions. **Nothing reaches Amazon without your approval** |
 | **Professional** | **$129/mo** (~$110/mo annual, $1,321/yr) | 14-day free trial, card required | Sellers who want the system to act on its own | Everything in Growth, **running unattended** — rule-based bid automation, budget & placement automations, dayparting (beta), campaign chaining with keyword isolation, the AI assistant, full audit trail + one-click undo |
 | **Operator Setup** | **$399 first month, then $129/mo** | Done-for-you | Sellers who want the system built for them | Everything in Professional + done-for-you campaign architecture, rule and profit-model configuration, and a written 30-day operating runbook |
 
 - **Every paid plan tracks unlimited products.** Growth and Professional differ by **autonomy** — whether the platform waits for your approval or acts on its own — not by how many products you can manage.
-- **14-day free trial** on Growth and Professional. **A card is required to start**; you pay $0 today, cancel anytime before day 14 at no charge, and it renews monthly from day 14. The $19 Review plan is billed monthly from day one.
+- **14-day free trial on all three plans.** **A card is required to start**; you pay $0 today, cancel anytime before day 14 at no charge, and your card is charged your plan price on day 14 and renews monthly from there.
 - **Annual billing** saves roughly 15% on Growth and Professional.
 - **One Amazon Seller Central account per plan.** Managing multiple accounts? [Contact us](https://rrw-ads.com/support).
 - **Partner / affiliate program** — earn 20% recurring for referrals. See [the referral program](https://rrw-ads.com/referral).
