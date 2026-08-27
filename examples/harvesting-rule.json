@@ -1,0 +1,34 @@
+{
+  "$schema": "../schema/rule.schema.json",
+  "name": "Harvest proven search terms to exact match",
+  "type": "harvest",
+  "schedule_interval": "7_days",
+  "auto_apply": false,
+  "source_campaigns": ["Cutting Board Gel - Auto"],
+  "destination_campaigns": ["Cutting Board Gel - Exact"],
+  "destination_match_type": "exact",
+  "default_bid": 1.05,
+  "add_negative_to_source": true,
+  "rules": [
+    {
+      "lookback_days": 30,
+      "conditions": [
+        { "metric": "orders", "operator": ">=", "value": 2 }
+      ]
+    }
+  ],
+  "explanation": {
+    "search_term": "food safe cutting board oil",
+    "thirty_day_orders": 3,
+    "source": "Auto campaign",
+    "action": "Create exact-match keyword in Manual campaign",
+    "optional_action": "Add negative-exact search term to source campaign",
+    "reason": "Give the proven search term independent bid and budget control while allowing Auto to continue discovering close variations."
+  },
+  "notes": [
+    "A search term cannot be bid on directly. Only a keyword in a manual campaign can.",
+    "orders >= 2 is the noise filter: in a 4,088-term sample, 609 terms produced exactly one order and only 132 reached three.",
+    "add_negative_to_source is a choice, not a rule. See docs/negative-keywords.md.",
+    "The engine will not negate a term into a campaign that is also a harvest destination."
+  ]
+}

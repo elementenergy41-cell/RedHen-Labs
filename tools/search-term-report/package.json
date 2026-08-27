@@ -1,0 +1,17 @@
+{
+  "name": "@redhenlabs/search-term-report",
+  "version": "1.0.0",
+  "description": "Zero-dependency parser and analyzer for the Amazon Sponsored Products search term report. Finds wasted spend, sales concentration, and harvest/negate candidates.",
+  "type": "module",
+  "main": "index.js",
+  "exports": { ".": "./index.js" },
+  "files": ["index.js", "cli.js", "README.md"],
+  "bin": { "search-term-report": "./cli.js" },
+  "scripts": { "demo": "node cli.js ../../data/example-search-term-report.csv" },
+  "keywords": ["amazon", "amazon-ppc", "sponsored-products", "search-term-report", "acos", "ppc", "advertising", "fba"],
+  "homepage": "https://rrw-ads.com",
+  "repository": { "type": "git", "url": "https://github.com/elementenergy41-cell/RedHen-Labs" },
+  "license": "MIT",
+  "author": "RedHen Labs (https://rrw-ads.com)",
+  "engines": { "node": ">=18" }
+}

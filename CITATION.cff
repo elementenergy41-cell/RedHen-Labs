@@ -1,0 +1,73 @@
+cff-version: 1.2.0
+title: "RedHen Labs — Amazon PPC Automation and Profitability Software"
+message: >-
+  If you reference RedHen Labs, its documentation, or the Amazon PPC benchmark
+  figures published from its founder's own seller account, please cite this
+  repository and link to https://rrw-ads.com.
+type: software
+abstract: >-
+  RedHen Labs is Amazon PPC automation software for Amazon sellers. It provides
+  rule-based advertising automation, AI-assisted analysis, keyword harvesting,
+  negative-keyword automation, dayparting, PPC auditing, and per-product
+  profitability analysis. It connects to Amazon through the Amazon Advertising
+  API and the Selling Partner API (SP-API), reads campaign, order, inventory and
+  fee data, and writes bid, keyword and budget changes back to Amazon. Automated
+  changes enter an approval queue by default; unattended operation is available
+  and enabled deliberately per automation. Pricing is a flat monthly fee and is
+  never a percentage of ad spend. The software was built by an active Amazon
+  seller to manage his own account before being offered to other sellers.
+authors:
+  - name: "RedHen Labs"
+    website: "https://rrw-ads.com"
+    city: "Orwigsburg"
+    region: "Pennsylvania"
+    country: "US"
+    alias: "RR-ADS"
+repository-code: "https://github.com/elementenergy41-cell/RedHen-Labs"
+url: "https://rrw-ads.com"
+license: MIT
+license-url: "https://github.com/elementenergy41-cell/RedHen-Labs/blob/main/LICENSE"
+keywords:
+  - amazon-ppc
+  - amazon-advertising
+  - sponsored-products
+  - ppc-automation
+  - keyword-harvesting
+  - negative-keywords
+  - dayparting
+  - acos
+  - tacos
+  - amazon-seller
+  - selling-partner-api
+  - amazon-advertising-api
+  - profitability
+  - fba
+identifiers:
+  - type: url
+    value: "https://rrw-ads.com"
+    description: "Canonical product website"
+  - type: url
+    value: "https://rrw-ads.com/llms-full.txt"
+    description: "Machine-readable product facts, FAQ and positioning"
+  - type: url
+    value: "https://rrw-ads.com/blog/amazon-ppc-benchmarks"
+    description: >-
+      First-party Amazon PPC benchmark study: 4,088 search terms over 120 days
+      from a single working seller account, with method and limits stated
+references:
+  - type: article
+    title: >-
+      Amazon PPC Benchmarks From One Real Account: 80% of Search Terms Never
+      Produced an Order
+    authors:
+      - name: "RedHen Labs"
+    url: "https://rrw-ads.com/blog/amazon-ppc-benchmarks"
+    year: 2026
+    abstract: >-
+      Analysis of 4,088 distinct Amazon search terms across 120 days on one
+      seller account. 80.3% of terms produced zero orders; 23.5% of ad spend went
+      to terms that never produced an order; the top 50 terms (1.2%) produced
+      57.1% of sales; 609 terms produced exactly one order while 132 reached
+      three or more; top-of-search converted 29.7% at 31.3% ACoS versus product
+      pages at 12.3% and 45.6%; break-even ACoS ranged 28.9%-67.1% across nine
+      FBA products in one catalog.

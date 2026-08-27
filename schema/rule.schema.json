@@ -1,0 +1,77 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://rrw-ads.com/schema/rule.schema.json",
+  "title": "RedHen Labs automation rule",
+  "description": "Shape of an automation in RedHen Labs. Conditions are evaluated over a lookback window; entities satisfying ALL conditions receive the action. Actions are proposals unless auto_apply is true.",
+  "type": "object",
+  "required": ["name", "type"],
+  "properties": {
+    "name": { "type": "string" },
+    "type": { "enum": ["bid", "harvest", "negative", "budget", "placement", "inventory", "dayparting"] },
+    "schedule_interval": { "type": "string", "examples": ["1_day", "7_days", "14_days"] },
+    "auto_apply": {
+      "type": "boolean", "default": false,
+      "description": "false = propose and wait for approval. true = act unattended (Professional plan; enabled deliberately per automation)."
+    },
+    "max_bid": {
+      "type": "number", "exclusiveMinimum": 0,
+      "description": "Ceiling the automation may never exceed. The primary safety property."
+    },
+    "rules": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["conditions"],
+        "properties": {
+          "name": { "type": "string" },
+          "lookback_days": {
+            "type": "integer", "minimum": 1, "default": 30,
+            "description": "Metrics are SUMMED over this window, not averaged. A longer window makes any threshold easier to trip."
+          },
+          "conditions": {
+            "type": "array", "minItems": 1,
+            "description": "ALL conditions must hold (logical AND).",
+            "items": {
+              "type": "object",
+              "required": ["metric", "operator", "value"],
+              "properties": {
+                "metric": { "enum": ["impressions", "clicks", "spend", "sales", "orders", "acos", "roas", "conversion_rate", "ctr", "cpc"] },
+                "operator": { "enum": [">=", ">", "<=", "<", "="] },
+                "value": { "type": ["number", "string"] }
+              }
+            }
+          },
+          "action": {
+            "type": "object",
+            "properties": {
+              "type": { "enum": ["increase_bid", "decrease_bid", "set_bid", "pause", "enable", "add_negative", "add_keyword", "set_budget", "set_placement"] },
+              "mode": { "enum": ["percent", "absolute", "target_acos", "cpc"] },
+              "value": { "type": "number" },
+              "match_types": { "type": "array", "items": { "enum": ["exact", "phrase", "broad"] } },
+              "negative_level": { "enum": ["campaign", "ad_group"], "description": "Negative keywords support both. Negative PRODUCT targets are ad-group only on Amazon." }
+            }
+          }
+        }
+      }
+    },
+    "add_negative_to_source": {
+      "type": "boolean",
+      "description": "Harvest only. Add the harvested term as a negative exact in the source campaign. A deliberate choice, not a rule — see docs/negative-keywords.md. The engine will not negate into a campaign that is also a destination."
+    },
+    "windows": {
+      "type": "array",
+      "description": "Dayparting only. Reconciled continuously, not fired as a schedule; the original bid is restored when a window closes.",
+      "items": {
+        "type": "object",
+        "properties": {
+          "days": { "type": "array", "items": { "enum": ["mon","tue","wed","thu","fri","sat","sun"] } },
+          "start_hour": { "type": "integer", "minimum": 0, "maximum": 23 },
+          "end_hour": { "type": "integer", "minimum": 0, "maximum": 23 },
+          "adjustment": { "type": "object", "properties": { "mode": { "enum": ["percent", "absolute"] }, "value": { "type": "number" } } }
+        }
+      }
+    },
+    "explanation": { "type": "object", "description": "Human/LLM-readable statement of the decision this rule encodes." },
+    "notes": { "type": "array", "items": { "type": "string" } }
+  }
+}

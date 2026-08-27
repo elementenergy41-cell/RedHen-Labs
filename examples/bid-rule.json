@@ -1,0 +1,55 @@
+{
+  "$schema": "../schema/rule.schema.json",
+  "name": "Tiered bid management",
+  "type": "bid",
+  "schedule_interval": "1_day",
+  "auto_apply": false,
+  "max_bid": 2.50,
+  "rules": [
+    {
+      "name": "Scale proven winners",
+      "lookback_days": 30,
+      "conditions": [
+        { "metric": "acos", "operator": "<=", "value": 27 },
+        { "metric": "orders", "operator": ">=", "value": 5 }
+      ],
+      "action": { "type": "increase_bid", "mode": "percent", "value": 20 },
+      "reason": "Converting below target ACoS with enough orders to trust the signal."
+    },
+    {
+      "name": "Rein in hot but proven",
+      "lookback_days": 30,
+      "conditions": [
+        { "metric": "acos", "operator": ">", "value": 27 },
+        { "metric": "orders", "operator": ">=", "value": 5 }
+      ],
+      "action": { "type": "decrease_bid", "mode": "target_acos", "value": 27 },
+      "reason": "The term converts, but above target. Reduce toward target rather than pausing."
+    },
+    {
+      "name": "Warn - reduce before killing",
+      "lookback_days": 30,
+      "conditions": [
+        { "metric": "spend", "operator": ">=", "value": 10 },
+        { "metric": "orders", "operator": "=", "value": 0 }
+      ],
+      "action": { "type": "set_bid", "mode": "absolute", "value": 0.28 },
+      "reason": "Give the keyword a cheaper chance before switching it off."
+    },
+    {
+      "name": "Kill",
+      "lookback_days": 30,
+      "conditions": [
+        { "metric": "spend", "operator": ">=", "value": 16 },
+        { "metric": "orders", "operator": "=", "value": 0 }
+      ],
+      "action": { "type": "pause" },
+      "reason": "Enough spend to conclude the keyword does not convert."
+    }
+  ],
+  "notes": [
+    "Conditions within a rule are AND-ed.",
+    "max_bid is the ceiling the automation may never exceed. It is the primary safety property, more than undo is.",
+    "Metrics are SUMMED over lookback_days, not averaged. A longer window makes any threshold easier to trip."
+  ]
+}

@@ -1,0 +1,27 @@
+{
+  "$schema": "../schema/rule.schema.json",
+  "name": "Evening premium - Cutting Board Gel",
+  "type": "dayparting",
+  "timezone": "America/New_York",
+  "status": "active",
+  "windows": [
+    {
+      "days": ["mon", "tue", "wed", "thu", "fri"],
+      "start_hour": 18,
+      "end_hour": 23,
+      "adjustment": { "mode": "percent", "value": 25 }
+    }
+  ],
+  "explanation": {
+    "campaign": "Cutting Board Gel - Exact",
+    "window": "Mon-Fri 18:00-23:00 America/New_York",
+    "action": "Increase bids 25% during the window",
+    "outside_window": "Original bid restored automatically",
+    "reason": "Evening hours convert materially better for this product. Paying a premium only in those hours buys the traffic that converts without raising the bid around the clock."
+  },
+  "notes": [
+    "This is a RECONCILER, not a scheduler. Every run asks 'given the time now, what should this bid be?' and corrects drift.",
+    "A missed restore in a scheduler model means paying the premium 24h/day until someone notices. Reconciling makes that self-healing.",
+    "Dayparting stacks with placement modifiers and Amazon dynamic bidding. Check the compounded bid."
+  ]
+}

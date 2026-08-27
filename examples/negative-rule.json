@@ -1,0 +1,34 @@
+{
+  "$schema": "../schema/rule.schema.json",
+  "name": "Negate search terms that do not convert",
+  "type": "negative",
+  "schedule_interval": "7_days",
+  "auto_apply": false,
+  "rules": [
+    {
+      "name": "Auto-negate zero orders",
+      "lookback_days": 30,
+      "conditions": [
+        { "metric": "clicks", "operator": ">=", "value": 20 },
+        { "metric": "orders", "operator": "=", "value": 0 }
+      ],
+      "action": {
+        "type": "add_negative",
+        "match_types": ["exact"],
+        "negative_level": "campaign"
+      }
+    }
+  ],
+  "explanation": {
+    "search_term": "wood stain remover",
+    "clicks_30d": 24,
+    "orders_30d": 0,
+    "action": "Add as negative-exact at campaign level",
+    "reason": "Sufficient clicks to conclude the term does not convert for this product. Blocking it stops further spend without affecting adjacent terms."
+  },
+  "notes": [
+    "clicks >= 20 is what makes orders = 0 meaningful. Zero orders on two clicks is not evidence.",
+    "Negative EXACT blocks one term. Negative PHRASE removes a whole family and is rarely correct.",
+    "ASINs differ: negative product targets exist only at ad-group level on Amazon, never campaign level."
+  ]
+}
