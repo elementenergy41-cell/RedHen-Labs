@@ -1,10 +1,27 @@
 /**
- * SP-API Authentication — Complete Auth Chain
+ * SP-API Authentication — Full Auth Chain (AWS steps no longer required)
  *
- * This module handles the three-step authentication required for every SP-API request:
- *   1. LWA (Login with Amazon) token exchange → access token
- *   2. STS AssumeRole → temporary AWS credentials
- *   3. SigV4 request signing → signed Authorization header
+ * ⚠️ READ THIS FIRST — you probably do NOT need steps 2 and 3.
+ *
+ * Amazon no longer requires AWS SigV4 signing for SP-API. An LWA access token in the
+ * `x-amz-access-token` header is sufficient on its own. We verified that against the
+ * live API before removing the AWS half from our own production code: LWA token alone
+ * returned 200.
+ *
+ * We are leaving the full chain here because it still works and it is genuinely hard
+ * to find written down correctly — but if you are building something new, implement
+ * step 1 only. Skipping steps 2 and 3 means no IAM user, no role to assume, no
+ * rotating access keys, and one fewer credential that can silently expire.
+ *
+ * That last point is not hypothetical. Our AWS access key lapsed on 2026-08-16 and
+ * every SP-API call began returning 403 with wording that reads as though each
+ * SELLER needs to re-authorize. Four customers looked broken; the actual fault was a
+ * single expired credential of ours that the protocol did not need in the first place.
+ *
+ * This module handles the three-step authentication:
+ *   1. LWA (Login with Amazon) token exchange → access token   ← the only required step
+ *   2. STS AssumeRole → temporary AWS credentials              ← optional, legacy
+ *   3. SigV4 request signing → signed Authorization header     ← optional, legacy
  *
  * No external AWS SDK required — uses only Node.js built-in crypto module.
  *

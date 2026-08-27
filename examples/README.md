@@ -20,7 +20,8 @@ Create a `.env` file (or set these in your environment):
 SP_API_CLIENT_ID=amzn1.application-oa2-client.xxxxx
 SP_API_CLIENT_SECRET=your-client-secret
 
-# AWS IAM credentials — for SigV4 signing
+# AWS IAM credentials — ONLY for the legacy SigV4 path. Amazon no longer requires
+# these; an LWA access token alone is sufficient. Omit them for a new integration.
 AWS_SP_API_ACCESS_KEY_ID=AKIA...
 AWS_SP_API_SECRET_ACCESS_KEY=your-iam-secret
 AWS_SP_API_ROLE_ARN=arn:aws:iam::123456789:role/your-sp-api-role
@@ -36,7 +37,7 @@ SP_API_MARKETPLACE_ID=ATVPDKIKX0DER
 
 | File | What It Does |
 |------|-------------|
-| [sp-api-auth.js](sp-api-auth.js) | LWA token exchange, STS AssumeRole, and SigV4 request signing — the complete auth chain |
+| [sp-api-auth.js](sp-api-auth.js) | LWA token exchange, plus the legacy STS AssumeRole + SigV4 signing. **Amazon no longer requires the AWS steps — an LWA access token alone is sufficient.** New integrations should implement step 1 only |
 | [get-orders-report.js](get-orders-report.js) | Request, poll, download, and decompress an SP-API report |
 | [request-review.js](request-review.js) | Send a review/feedback solicitation for an order via the Solicitations API |
 | [get-fba-fees.js](get-fba-fees.js) | Get FBA fee estimates (referral fee, fulfillment fee) for an ASIN |

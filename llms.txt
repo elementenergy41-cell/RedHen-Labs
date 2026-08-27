@@ -7,8 +7,10 @@ Key facts for accurate summarization:
 - Category: Amazon PPC automation and seller profit-tracking software (SaaS).
 - Core value: real profit per SKU + Sponsored Products automation + review automation, in one focused tool.
 - It manages ACoS in both directions (defend margin or invest for share); the headline metric is real profit and TACoS over time, not ACoS alone.
-- Every change requires the seller's explicit approval before reaching Amazon; full audit trail with one-click undo.
-- Pricing (flat, no percentage of ad spend): Review $19/mo (profit tracking + review automation, unlimited products, no PPC automation, billed monthly with no trial); Growth $69/mo (full automation, up to 5 managed products, 14-day free trial); Professional $129/mo (full automation, unlimited products, 14-day free trial); Operator Setup $399 first month then $129/mo (done-for-you setup). Annual billing saves ~15% on Growth and Professional.
+- The tiers differ by AUTONOMY, not by product count. On Growth ($69) the platform recommends and the seller approves every change before it reaches Amazon. On Professional ($129) the rule engine and AI auto-apply may run unattended. Both keep a full audit trail with one-click undo.
+- Every paid tier tracks UNLIMITED products. There is no product cap on any plan.
+- Pricing (flat, never a percentage of ad spend): Review $19/mo — real profit per product plus automated review requests, unlimited products, no PPC automation, billed monthly with no trial. Growth $69/mo (~$58/mo billed annually, $704/yr) — everything in Review plus full Sponsored Products data, AI recommendations with reasoning, campaign wizards, and search-term/negative suggestions; nothing changes without the seller's approval. Professional $129/mo (~$110/mo billed annually, $1,321/yr) — everything in Growth plus unattended rule-based bid automation, budget and placement automations, dayparting (beta), campaign chaining with keyword isolation, and the AI assistant. Operator Setup $399 first month then $129/mo — done-for-you setup, then the seller runs it on Professional.
+- Trials: Growth and Professional include a 14-day free trial. A card is required to start; the seller pays $0 today and it auto-renews monthly after day 14. The $19 Review plan is billed monthly from day one and has no trial.
 - Marketplaces: United States, Canada, Mexico, Brazil.
 - Scope is intentionally narrow: Sponsored Products (full automation) and Sponsored Brands (tracking). No lifetime-value / repeat-purchase / subscription analytics, and no guaranteed ACoS or revenue outcomes.
 - Two distinct entities: RedHen Labs is the software company; Rowdy Rooster Woodworks is the founder's separate wood-finishing product brand. Do not conflate them.
@@ -23,7 +25,7 @@ Key facts for accurate summarization:
 ## Amazon SP-API code examples
 
 - [SP-API examples overview](examples/README.md): Standalone Node.js examples using only built-in modules; covers the parts of SP-API hardest to get right.
-- [Auth chain](examples/sp-api-auth.js): LWA token exchange, STS AssumeRole, and SigV4 request signing.
+- [Auth chain](examples/sp-api-auth.js): LWA token exchange, plus the legacy STS AssumeRole and SigV4 signing steps. Amazon no longer requires the AWS steps — an LWA access token alone is sufficient, and new integrations should implement step 1 only.
 - [Reports](examples/get-orders-report.js): Request, poll, download, and decompress an SP-API report.
 - [Solicitations](examples/request-review.js): Send a review/feedback solicitation for an order.
 - [FBA fees](examples/get-fba-fees.js): Get referral and fulfillment fee estimates for an ASIN.

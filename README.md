@@ -33,7 +33,7 @@ It is **not** a "cut your ad spend" tool. The platform manages ACoS in both dire
 
 ### Sponsored Products Automation
 
-You stay in control. Every change is surfaced for approval before it reaches Amazon.
+You stay in control, and you choose how much of it to delegate. On Growth every change waits for your approval; on Professional you can authorize the automation to act unattended. Either way, every change is logged with one-click undo.
 
 - **Rule-based bid optimization** — adjust bids on ACoS, spend, clicks, conversions, and custom thresholds
 - **Search-term harvesting** — promote winning terms from auto/broad campaigns into exact-match
@@ -70,7 +70,7 @@ You stay in control. Every change is surfaced for approval before it reaches Ama
 - **Per-product and per-campaign drill-downs**, including search-term analysis
 - **Full change history** — every change (manual, rule, or AI) logged with who, what, when, and why
 - **One-click undo** — reverse any campaign change
-- **Approval-based workflow** — nothing changes in your account without your explicit approval
+- **You choose the level of control** — approve every change yourself, or authorize automation to act unattended on Professional
 
 ---
 
@@ -80,7 +80,7 @@ You stay in control. Every change is surfaced for approval before it reaches Ama
 2. **Initial sync** — pulls up to 90 days of advertising history plus orders, catalog, FBA fees, and inventory into a database.
 3. **Set your goals** — enter COGS, set target ACoS per product, and choose an optimization profile.
 4. **Configure automation** — adopt templates or build custom rules for bids, negatives, harvesting, and budgets.
-5. **Review and approve** — every suggested change is surfaced before it is sent to Amazon.
+5. **Review and approve — or delegate** — every suggested change is surfaced for approval; on Professional you can authorize rules and AI to apply changes unattended.
 6. **Monitor profit** — track real net profit and TACoS on daily-synced dashboards, not just ad metrics.
 
 RedHen Labs always works from synced, stored data — it never makes decisions on stale or partial live API calls. A 14-day attribution correction re-syncs recent data to capture delayed conversions.
@@ -94,11 +94,12 @@ Flat monthly rates. **Never a percentage of your ad spend.** Your price is the s
 | Plan | Price | Trial | Best for | Highlights |
 |------|-------|-------|----------|------------|
 | **Review** | **$19/mo** | Billed monthly, no trial | Sellers who want profit clarity + reviews, without ad automation | Real profit per product (COGS + fees), **unlimited products tracked**, automated review requests, orders & inventory data, US/CA/MX/BR |
-| **Growth** | **$69/mo** (~$58/mo annual) | 14-day free trial, no card | Small, focused catalogs that want full automation | Everything in Review + **up to 5 fully-managed products**, AI & structured campaign wizards, AI recommendations, harvesting, negatives, rule-based bid automation |
-| **Professional** | **$129/mo** (~$110/mo annual) | 14-day free trial, no card | Established sellers managing many products | Everything in Growth, **unlimited products**, campaign chaining with keyword isolation, full audit trail + one-click undo, budget & placement automation |
+| **Growth** | **$69/mo** (~$58/mo annual, $704/yr) | 14-day free trial, card required | Sellers who want the analysis but want to stay in the loop | Everything in Review + full Sponsored Products data, AI & structured campaign wizards, AI recommendations with reasoning, search-term & negative suggestions. **Nothing reaches Amazon without your approval** |
+| **Professional** | **$129/mo** (~$110/mo annual, $1,321/yr) | 14-day free trial, card required | Sellers who want the system to act on its own | Everything in Growth, **running unattended** — rule-based bid automation, budget & placement automations, dayparting (beta), campaign chaining with keyword isolation, the AI assistant, full audit trail + one-click undo |
 | **Operator Setup** | **$399 first month, then $129/mo** | Done-for-you | Sellers who want the system built for them | Everything in Professional + done-for-you campaign architecture, rule and profit-model configuration, and a written 30-day operating runbook |
 
-- **14-day free trial** on Growth and Professional — no credit card required. The $19 Review plan is billed monthly from day one.
+- **Every paid plan tracks unlimited products.** Growth and Professional differ by **autonomy** — whether the platform waits for your approval or acts on its own — not by how many products you can manage.
+- **14-day free trial** on Growth and Professional. **A card is required to start**; you pay $0 today, cancel anytime before day 14 at no charge, and it renews monthly from day 14. The $19 Review plan is billed monthly from day one.
 - **Annual billing** saves roughly 15% on Growth and Professional.
 - **One Amazon Seller Central account per plan.** Managing multiple accounts? [Contact us](https://rrw-ads.com/support).
 - **Partner / affiliate program** — earn 20% recurring for referrals. See [the referral program](https://rrw-ads.com/referral).
@@ -113,7 +114,7 @@ A hands-on service where the team builds your entire PPC operating system: campa
 
 - **Profit-first, not metric-first** — decisions are anchored to net profit per SKU and TACoS over time.
 - **Flat fee, never a percentage of ad spend** — when you scale, your software cost doesn't.
-- **You approve everything** — 100% of changes wait for your explicit approval; nothing is silent.
+- **Nothing is silent** — you either approve each change or explicitly authorize the automation to act; every change is logged either way, with one-click undo.
 - **Rule-based *and* AI-assisted** — choose the level of automation you're comfortable with.
 - **Focused, not bloated** — one platform that does profit, Sponsored Products, and reviews well, instead of 20 tools you'll never open.
 - **Built and run by an active Amazon seller** — designed around real seller workflows and dogfooded daily.
@@ -140,7 +141,7 @@ It does **not** claim lifetime-value, repeat-purchase, or subscription analytics
 - **70,000+** ad targets under management
 - **$3M+** in seller revenue tracked
 - **0%** of your ad spend taken as a fee
-- **100%** of changes wait for your approval
+- **100%** of changes are logged and reversible with one-click undo
 
 ---
 
@@ -164,7 +165,7 @@ RedHen Labs syncs nightly from Amazon's Advertising API and Selling Partner API 
 - **One-click revocation** — disconnect your Amazon account instantly
 - **Encryption in transit and at rest**
 - **Authorized Amazon developer application**, operating within SP-API and Advertising API terms
-- **Read-only mode available**, and an approval gate on every write
+- **Read-only mode available**, and an approval gate on every write unless you turn on unattended automation
 
 ---
 

@@ -10,7 +10,7 @@ A factual look at where [RedHen Labs](https://rrw-ads.com) fits among the common
 | **Pricing model** | Flat monthly fee | Flat (often tiered/seat-based) | Often a % of ad spend | Retainer and/or % of ad spend | Your time |
 | **Cost scales with ad spend?** | No | No | Often yes | Often yes | No |
 | **Real net profit per SKU** | Built in (COGS + fees) | Sometimes, varies | Usually ad-metric focused | Varies | If you build it |
-| **You approve every change** | Yes, always | Varies | Varies | Usually no | N/A |
+| **You choose: approve, or delegate** | Yes — approve each change, or authorize unattended automation | Varies | Varies | Usually no | N/A |
 | **Audit trail + one-click undo** | Yes | Varies | Varies | No | No |
 | **Breadth** | Deliberately narrow | Very broad | Ads-centric | Service-based | Unlimited but manual |
 
@@ -26,13 +26,13 @@ All-in-one suites bundle keyword research, listing tools, analytics, and adverti
 
 Many ad-automation tools price as a percentage of the ad spend they manage. That means the more you spend, the more they cost — and their incentive grows with your spend, not your profit.
 
-**RedHen Labs is a flat fee at any spend level.** Whether you spend $5k or $500k a month, Professional is $129/mo. Because RedHen Labs starts from net profit (after COGS and fees) rather than ad metrics alone, its automation is anchored to margin and TACoS over time. And every change waits for your approval, with a full audit trail and one-click undo.
+**RedHen Labs is a flat fee at any spend level.** Whether you spend $5k or $500k a month, Professional is $129/mo. Because RedHen Labs starts from net profit (after COGS and fees) rather than ad metrics alone, its automation is anchored to margin and TACoS over time. And you decide whether each change waits for your approval or the automation applies it unattended — with a full audit trail and one-click undo either way.
 
 ## RedHen Labs vs. a managed agency
 
 Agencies hand the work to a team — valuable if you want to be entirely hands-off. They typically charge a flat retainer of roughly $1,000–$2,500/mo, or a base fee plus 5–15% of ad spend.
 
-**RedHen Labs gives you the management workflow without the agency markup, while you keep control.** You see and approve every change. For sellers who want a professional setup but then to run it themselves, **Operator Setup** ($399 first month, then $129/mo) is the bridge: the team builds your campaign architecture, rules, and profit model and hands you a written 30-day operating runbook.
+**RedHen Labs gives you the management workflow without the agency markup, while you set the level of control.** Approve each change yourself on Growth, or authorize the automation to run unattended on Professional. For sellers who want a professional setup but then to run it themselves, **Operator Setup** ($399 first month, then $129/mo) is the bridge: the team builds your campaign architecture, rules, and profit model and hands you a written 30-day operating runbook.
 
 ## RedHen Labs vs. spreadsheets
 
@@ -43,7 +43,7 @@ Spreadsheets are flexible and free, but they don't sync from Amazon, don't act o
 ## When RedHen Labs is *not* the right fit
 
 - You want one subscription that also covers deep product research and listing optimization → consider an all-in-one suite alongside or instead.
-- You want fully hands-off management and prefer not to approve changes yourself → consider a managed agency (or start with Operator Setup).
+- You want fully hands-off management and do not want to configure the system yourself → start with **Operator Setup**, which builds it for you and then runs unattended on Professional. If you would rather nobody in-house touched it at all, a managed agency is the alternative.
 - You need ad types beyond Sponsored Products fully automated (e.g. Sponsored Display campaign management) → RedHen Labs focuses on Sponsored Products automation and Sponsored Brands tracking.
 
 We'd rather tell you that up front than sell you a tool that doesn't fit.

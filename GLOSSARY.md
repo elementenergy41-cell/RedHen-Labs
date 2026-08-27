@@ -84,4 +84,4 @@ Plain-language definitions of the Amazon advertising and seller-profitability te
 
 **Audit trail** — A complete log of every change (manual, rule-based, or AI) with who, what, when, and why — paired with one-click undo.
 
-**Approval workflow** — The gate that holds every proposed change for your explicit approval before it reaches Amazon. At RedHen Labs, 100% of changes wait for approval.
+**Approval workflow** — The gate that holds a proposed change for your explicit approval before it reaches Amazon. At RedHen Labs it is the default and the whole model on Growth ($69). On Professional ($129) you may authorize the rule engine and AI to apply changes unattended instead. Every change is logged with one-click undo either way.

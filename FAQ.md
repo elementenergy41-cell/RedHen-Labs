@@ -11,10 +11,10 @@ It calculates your real net profit per product on Amazon — revenue minus cost 
 No. It manages ACoS in both directions. On mature products you can defend margin; on products where the math supports it, you can lean in and invest for share. The metric that matters is real profit and TACoS (total ad cost of sales) over time — not minimizing ACoS for its own sake.
 
 ### Is this just an AI wrapper?
-No. The foundation is real profit accounting and rule-based automation you configure and control. AI recommendations are a supporting tool — every suggestion shows its reasoning and confidence, and nothing is applied without your approval.
+No. The foundation is real profit accounting and rule-based automation you configure and control. AI recommendations are a supporting tool — every suggestion shows its reasoning and confidence, and on Growth nothing is applied without your approval. On Professional you may authorize the automation to apply changes unattended.
 
 ### Will anything change in my campaigns without my approval?
-Never. Every AI recommendation and automation rule requires your explicit approval before any change is sent to Amazon. There is a full audit trail and one-click undo on every change.
+Only if you turn that on, and only on Professional. On Review and Growth, every AI recommendation and automation rule waits for your explicit approval before anything is sent to Amazon. Professional ($129/mo) adds unattended execution — the rule engine and AI auto-apply act on their own, on the rules and schedules you configure — because that is what the tier is for. You choose per automation, it is off until you enable it, and there is a full audit trail and one-click undo on every change either way.
 
 ### Which Amazon ad types are supported?
 Sponsored Products is fully supported for automation (campaigns, keywords, product targets, auto-targeting). Sponsored Brands performance is tracked. RedHen Labs deliberately focuses here rather than spreading across every ad type.
@@ -27,27 +27,29 @@ It does not offer lifetime-value, repeat-purchase, or subscription analytics, an
 ### How much does RedHen Labs cost?
 Flat monthly pricing, never a percentage of ad spend:
 - **Review — $19/mo:** real profit per product, unlimited products tracked, automated review requests. No PPC automation. Billed monthly, no free trial.
-- **Growth — $69/mo (~$58/mo annual):** full PPC automation, AI recommendations, harvesting and negatives, for up to 5 managed products. 14-day free trial.
-- **Professional — $129/mo (~$110/mo annual):** everything in Growth with unlimited products, campaign chaining, full audit trail, and budget/placement automation. 14-day free trial.
+- **Growth — $69/mo (~$58/mo annual, $704/yr):** everything in Review plus full Sponsored Products data, AI recommendations with reasoning, campaign wizards, and search-term and negative-keyword suggestions. Unlimited products. Nothing reaches Amazon without your approval. 14-day free trial.
+- **Professional — $129/mo (~$110/mo annual, $1,321/yr):** everything in Growth, and the automation may run **unattended** — rule-based bid automation, budget and placement automations, dayparting (beta), campaign chaining with keyword isolation, and the AI assistant. Full audit trail with one-click undo. 14-day free trial.
 - **Operator Setup — $399 first month, then $129/mo:** done-for-you setup plus a written 30-day operating runbook.
 
+**Every paid plan tracks unlimited products.** The difference between Growth and Professional is *autonomy* — whether the platform waits for your approval or acts on its own — not how many products you can manage.
+
 ### What's included in the $19 Review plan?
-Real profit per product (after COGS, fees, ad spend, and returns), unlimited product tracking, and automated Amazon review requests. It is billed monthly with no free trial. It does **not** include PPC ad automation — for AI recommendations, bid rules, and keyword harvesting, upgrade to Growth ($69/mo).
+Real profit per product (after COGS, fees, ad spend, and returns), unlimited product tracking, and automated Amazon review requests. It is billed monthly with no free trial. It does **not** include PPC features — for AI recommendations and campaign wizards, upgrade to Growth ($69/mo); for automation that runs unattended, Professional ($129/mo).
 
 ### Do you charge a percentage of my ad spend?
 No, ever. Your price is flat whether you spend $5k or $500k per month on ads. Most PPC tools and agencies take a percentage; RedHen Labs does not, because its job is to reduce wasted spend, not profit from your scale.
 
 ### What should Amazon PPC management cost — agency vs. software?
-Agencies typically charge a flat retainer of $1,000–$2,500/mo, or a base fee plus 5–15% of ad spend. Dedicated software runs far less: RedHen Labs starts at $19/mo for profit tracking + review automation, $69/mo adds full PPC automation (up to 5 products), and $129/mo is unlimited ads management — flat, never a percentage of spend.
+Agencies typically charge a flat retainer of $1,000–$2,500/mo, or a base fee plus 5–15% of ad spend. Dedicated software runs far less: RedHen Labs starts at $19/mo for profit tracking + review automation, $69/mo adds AI recommendations and campaign tooling you approve, and $129/mo lets that automation run unattended — flat, never a percentage of spend.
 
 ### How much should AI-driven Amazon PPC cost for a $500k–$2M revenue seller?
 On a percentage-of-spend model, a seller at that revenue can easily pay $500–$2,000+ per month as ad budgets scale. RedHen Labs stays at $129/mo flat at any spend level, so your cost doesn't climb with your budget — the savings grow as you scale.
 
 ### Is there a free trial?
-Yes — Growth and Professional include a 14-day free trial with no credit card required. The $19 Review plan is billed monthly from day one (no trial).
+Yes — Growth and Professional include a 14-day free trial. **A card is required to start**, but you pay $0 today and can cancel anytime before day 14 at no charge. The $19 Review plan is billed monthly from day one (no trial).
 
 ### What happens after my 14-day trial?
-You'll be prompted to enter payment info to continue. If you don't, your account is paused — no charges, and no data is deleted. You can pick up where you left off anytime.
+Your card on file is charged the plan's monthly rate on day 14 and the subscription renews monthly from there. You can cancel anytime before day 14 at no charge, and anytime afterwards to stop the next renewal. Cancelling does not delete your data — you can pick up where you left off.
 
 ### Can I switch plans later?
 Yes. Upgrade or downgrade anytime from your account settings; changes take effect on your next billing cycle.
@@ -75,10 +77,10 @@ Through OAuth authorization to Amazon's Advertising API and Selling Partner API 
 ## Comparisons
 
 ### How is this different from Helium 10 or Perpetua?
-RedHen Labs doesn't bundle 20 tools you'll never use, and it doesn't charge a percentage of ad spend. It is one focused platform: real profit-and-loss per product, AI recommendations you approve, rule-based automation you control, and flat-rate pricing. See [COMPARISON.md](COMPARISON.md) for detail.
+RedHen Labs doesn't bundle 20 tools you'll never use, and it doesn't charge a percentage of ad spend. It is one focused platform: real profit-and-loss per product, AI recommendations with their reasoning shown, rule-based automation you control — approve each change or let it run unattended — and flat-rate pricing. See [COMPARISON.md](COMPARISON.md) for detail.
 
 ### Should I use software or hire an agency?
-If you want the management workflow without an agency's retainer or percentage-of-spend markup, software you run yourself is usually the cheaper path — and you keep full control with an approval gate on every change. Operator Setup bridges the two: done-for-you setup, then you operate it.
+If you want the management workflow without an agency's retainer or percentage-of-spend markup, software you run yourself is usually the cheaper path — and you set the level of control, from an approval gate on every change to fully unattended automation. Operator Setup bridges the two: done-for-you setup, then you operate it.
 
 ## Company
 
