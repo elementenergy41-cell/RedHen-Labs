@@ -32,22 +32,29 @@
 <title>Break-Even ACoS Calculator</title>
 <meta name="description" content="Work out the real break-even ACoS for an Amazon product from its price and per-unit costs, plus a target ACoS and a max CPC bid. Runs entirely in your browser.">
 <style>
+  /* Every colour below is a token. --ink-3 is the lightest text tone that is
+     still used for real prose (the footer credit, the field help, the result
+     caption), so it is set to clear WCAG AA 4.5:1 against every surface it can
+     land on: --surface, --paper, --surface-2 and --warn-bg. */
   :root {
+    color-scheme: light;
     --paper:      #f7f7f4;
     --surface:    #ffffff;
     --surface-2:  #f0f0ec;
     --ink:        #191c19;
     --ink-2:      #4a504a;
-    --ink-3:      #767c75;
+    --ink-3:      #696f68;
     --line:       #dedfd8;
     --accent:     #0f6b57;
     --accent-ink: #0b4a3c;
     --warn:       #a3341d;
     --warn-bg:    #fbeeea;
+    --shadow:     rgba(0,0,0,.09);
     --radius:     12px;
   }
   @media (prefers-color-scheme: dark) {
     :root:not([data-theme="light"]) {
+      color-scheme: dark;
       --paper:      #15181a;
       --surface:    #1d2124;
       --surface-2:  #23272b;
@@ -59,9 +66,11 @@
       --accent-ink: #7fd8be;
       --warn:       #f08a6d;
       --warn-bg:    #2e1d18;
+      --shadow:     rgba(0,0,0,.4);
     }
   }
   :root[data-theme="dark"] {
+    color-scheme: dark;
     --paper:      #15181a;
     --surface:    #1d2124;
     --surface-2:  #23272b;
@@ -73,6 +82,7 @@
     --accent-ink: #7fd8be;
     --warn:       #f08a6d;
     --warn-bg:    #2e1d18;
+    --shadow:     rgba(0,0,0,.4);
   }
 
   * { box-sizing: border-box; }
@@ -141,7 +151,7 @@
   .tab[aria-selected="true"] {
     background: var(--surface);
     color: var(--ink);
-    box-shadow: 0 1px 2px rgba(0,0,0,.09);
+    box-shadow: 0 1px 2px var(--shadow);
   }
   .tab:focus-visible { outline: 2px solid var(--accent); outline-offset: 1px; }
 
@@ -168,7 +178,18 @@
     grid-template-columns: repeat(2, minmax(0, 1fr));
     gap: 14px;
   }
-  @media (max-width: 480px) { .grid { grid-template-columns: 1fr; } }
+  @media (max-width: 480px) {
+    .grid { grid-template-columns: 1fr; }
+    /* At phone width three equal tabs leave ~103px of text room, and
+       "Break-even ACoS" needs more than that. Let it wrap onto a second line
+       rather than clipping the label to "Break-even A...". */
+    .tab {
+      font-size: 13px;
+      padding: 8px 4px;
+      white-space: normal;
+      line-height: 1.25;
+    }
+  }
 
   .field label {
     display: block;
@@ -322,9 +343,9 @@
   </header>
 
   <div class="tabs" role="tablist" aria-label="Which number to show">
-    <button class="tab" role="tab" id="tab-be"  aria-selected="true"  aria-controls="panel" data-view="be">Break-even ACoS</button>
-    <button class="tab" role="tab" id="tab-tg"  aria-selected="false" aria-controls="panel" data-view="tg">Target ACoS</button>
-    <button class="tab" role="tab" id="tab-cpc" aria-selected="false" aria-controls="panel" data-view="cpc">Max CPC bid</button>
+    <button class="tab" role="tab" id="tab-be"  aria-selected="true"  aria-controls="panel" data-view="be"  tabindex="0">Break-even ACoS</button>
+    <button class="tab" role="tab" id="tab-tg"  aria-selected="false" aria-controls="panel" data-view="tg"  tabindex="-1">Target ACoS</button>
+    <button class="tab" role="tab" id="tab-cpc" aria-selected="false" aria-controls="panel" data-view="cpc" tabindex="-1">Max CPC bid</button>
   </div>
 
   <div id="panel" role="tabpanel" aria-labelledby="tab-be">
@@ -427,11 +448,15 @@
     return (isFinite(n) && n >= 0) ? n : 0;
   }
   function clamp(n, lo, hi) { return Math.min(hi, Math.max(lo, n)); }
+  // A number input accepts exponent notation, so a price of "1e308" is typable
+  // and overflows to Infinity once it is multiplied by a fee. Print an em dash
+  // rather than "$Infinity"; the arithmetic above is untouched.
   function money(n) {
+    if (!isFinite(n)) return "—";
     var s = Math.abs(n).toFixed(2).replace(/\B(?=(\d{3})+(?!\d))/g, ",");
     return (n < 0 ? "-$" : "$") + s;
   }
-  function pct(n) { return n.toFixed(1) + "%"; }
+  function pct(n) { return isFinite(n) ? n.toFixed(1) + "%" : "—"; }
 
   // The cushion input is duplicated across two panels; keep them in step so the
   // target ACoS a visitor sets on one tab is the one used on the other.
@@ -570,17 +595,25 @@
   tabs.forEach(function (btn, i) {
     btn.addEventListener("click", function () {
       view = btn.getAttribute("data-view");
-      tabs.forEach(function (b) { b.setAttribute("aria-selected", String(b === btn)); });
+      tabs.forEach(function (b) {
+        b.setAttribute("aria-selected", String(b === btn));
+        // Roving tabindex: one stop for the whole tablist, arrows move within
+        // it. Without this, Tab lands on all three before reaching an input.
+        b.tabIndex = b === btn ? 0 : -1;
+      });
       document.getElementById("panel").setAttribute("aria-labelledby", btn.id);
       render();
     });
     btn.addEventListener("keydown", function (e) {
-      var d = e.key === "ArrowRight" ? 1 : e.key === "ArrowLeft" ? -1 : 0;
-      if (!d) return;
+      var next = null;
+      if (e.key === "ArrowRight")     { next = tabs[(i + 1) % tabs.length]; }
+      else if (e.key === "ArrowLeft") { next = tabs[(i - 1 + tabs.length) % tabs.length]; }
+      else if (e.key === "Home")      { next = tabs[0]; }
+      else if (e.key === "End")       { next = tabs[tabs.length - 1]; }
+      if (!next) return;
       e.preventDefault();
-      var next = tabs[(i + d + tabs.length) % tabs.length];
-      next.focus();
       next.click();
+      next.focus();
     });
   });
 
