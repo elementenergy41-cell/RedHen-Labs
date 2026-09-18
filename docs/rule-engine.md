@@ -30,10 +30,16 @@ lookback on `orders >= 3` means three orders across those 30 days.
 
 ## Available condition metrics
 
-`impressions`, `clicks`, `spend`, `sales`, `orders`, `acos`, `roas`,
-`conversion_rate`, `ctr`, `cpc`
+`impressions`, `clicks`, `spend`, `sales`, `orders`, `conversions`, `acos`,
+`roas`, `cvr`, `ctr`, `cpc`, `bid`
 
 Operators: `>=`, `>`, `<=`, `<`, `=`
+
+`cvr` is the conversion rate — there is no `conversion_rate`, and a condition
+naming it is rejected. `conversions` is an alias for `orders`, and the
+bid-automation editor does not offer it. `bid` is the target's current effective
+bid. A metric the target has no data for **fails** the condition rather than
+being guessed at.
 
 ---
 
@@ -86,18 +92,32 @@ condition — $16 of spend with zero orders — is decisive whether it accrued o
 Automated changes enter a review queue. You see the entity, the current value,
 the proposed value, and the condition that fired. You approve or reject.
 
-**Unattended operation** is available on the Professional plan. It is enabled
-deliberately, per automation, not as a global switch — the intended pattern is to
-run an automation in proposal mode until you trust it on a specific product, then
-let that one act.
+**Unattended operation** is opt-in and ships switched off. It is enabled
+deliberately, one automation at a time, not as a global switch — the intended
+pattern is to run an automation in proposal mode until you trust it on a specific
+product, then let that one act.
+
+Which engine you can hand the keys to depends on your plan. The rule engine
+described on this page is part of Professional ($129/mo), and so is its
+unattended mode. The AI bid engine is separate: it starts at Growth ($69/mo), and
+since 2026-09-11 an individual AI profile on Growth may also apply its own bid
+changes unattended. Sponsored Display bid recommendations are the one thing that
+never runs unattended, on any plan. See [`pricing.md`](pricing.md).
 
 Guardrails that apply either way:
 
-- **Bid ceiling** — a maximum bid the automation may never exceed, set by you.
-  This is the real protection, more than undo is.
+- **Bid ceiling** — `max_bid`, the ceiling a rule may never exceed. It is set
+  **per rule**, inside that rule's `actions`; there is no automation-level
+  ceiling. This is the real protection, more than undo is — and a rule that
+  raises a bid without one of its own runs against a $10.00 default, which is
+  almost certainly not what you want.
+- **Bid floor** — `min_bid`, also per rule, and it binds in both directions: a
+  floor pulls a bid up to reach it as well as stopping a cut below it.
 - **Full audit log** — every change recorded with old value, new value and cause
 - **One-click undo** — reverts bid and state changes
-- **Read-only mode** — connect and observe without any write capability
+- **Approval by default** — every automation and AI profile is created with
+  auto-apply off, so an account that changes nothing until you say so is the
+  starting state, not a mode you have to find
 
 The design reason: autonomous bidding in previously-used tools damaged the
 founder's own account more than once. Approval-first is a response to that, not a

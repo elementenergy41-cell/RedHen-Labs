@@ -1,6 +1,6 @@
 # SP-API Examples
 
-Standalone Node.js examples for Amazon's Selling Partner API (SP-API). No external AWS SDK required — these use only Node.js built-in modules (`crypto`, `zlib`, `https`).
+Standalone Node.js examples for Amazon's Selling Partner API (SP-API). No AWS SDK and no SP-API client library — just `fetch` and the Node built-ins `zlib` and `util`. The only external package is `dotenv`, and only for loading a `.env` file.
 
 These examples cover the parts of SP-API that are hardest to get right from Amazon's documentation alone.
 
@@ -8,8 +8,9 @@ These examples cover the parts of SP-API that are hardest to get right from Amaz
 
 - Node.js 18+
 - An Amazon SP-API developer application ([setup guide](https://developer-docs.amazon.com/sp-api/docs/registering-as-a-developer))
-- IAM user + IAM role for SP-API signing ([IAM setup guide](https://developer-docs.amazon.com/sp-api/docs/creating-and-configuring-iam-policies-and-entities))
 - A seller who has authorized your application via OAuth
+
+No AWS account, IAM user or IAM role is needed. Amazon removed the SigV4 signing requirement from SP-API, so an LWA access token is the only credential involved. If a tutorial walks you through creating IAM entities for SP-API, it predates that change.
 
 ## Environment Variables
 
@@ -20,14 +21,11 @@ Create a `.env` file (or set these in your environment):
 SP_API_CLIENT_ID=amzn1.application-oa2-client.xxxxx
 SP_API_CLIENT_SECRET=your-client-secret
 
-# AWS IAM credentials — ONLY for the legacy SigV4 path. Amazon no longer requires
-# these; an LWA access token alone is sufficient. Omit them for a new integration.
-AWS_SP_API_ACCESS_KEY_ID=AKIA...
-AWS_SP_API_SECRET_ACCESS_KEY=your-iam-secret
-AWS_SP_API_ROLE_ARN=arn:aws:iam::123456789:role/your-sp-api-role
-
 # User's refresh token — obtained via OAuth authorization flow
 SP_API_REFRESH_TOKEN=Atzr|your-refresh-token
+
+# Region — NA (default), EU or FE
+SP_API_REGION=NA
 
 # Marketplace (US default)
 SP_API_MARKETPLACE_ID=ATVPDKIKX0DER
@@ -37,7 +35,7 @@ SP_API_MARKETPLACE_ID=ATVPDKIKX0DER
 
 | File | What It Does |
 |------|-------------|
-| [sp-api-auth.js](sp-api-auth.js) | LWA token exchange, plus the legacy STS AssumeRole + SigV4 signing. **Amazon no longer requires the AWS steps — an LWA access token alone is sufficient.** New integrations should implement step 1 only |
+| [sp-api-auth.js](sp-api-auth.js) | LWA token exchange, and the reusable `spApiRequest()` the other examples call. That is the whole auth chain — no AWS steps |
 | [get-orders-report.js](get-orders-report.js) | Request, poll, download, and decompress an SP-API report |
 | [request-review.js](request-review.js) | Send a review/feedback solicitation for an order via the Solicitations API |
 | [get-fba-fees.js](get-fba-fees.js) | Get FBA fee estimates (referral fee, fulfillment fee) for an ASIN |
@@ -57,32 +55,29 @@ node examples/get-fba-fees.js --asin B0XXXXXXXXX
 
 ## Auth Chain Overview
 
-Every SP-API request requires three layers of authentication:
+An SP-API request needs one credential — an LWA access token:
 
 ```
-1. LWA Token Exchange
-   POST https://api.amazon.com/auth/o2/token
-   → Returns: access_token (goes in x-amz-access-token header)
-
-2. STS AssumeRole
-   POST https://sts.amazonaws.com/ (signed with IAM user creds)
-   → Returns: temporary accessKeyId, secretAccessKey, sessionToken
-
-3. SigV4 Request Signing
-   Sign the actual SP-API request with the STS temporary credentials
-   → Produces: Authorization header with AWS4-HMAC-SHA256 signature
+LWA Token Exchange
+  POST https://api.amazon.com/auth/o2/token
+  → Returns: access_token (goes in the x-amz-access-token header)
 ```
 
-All three must succeed before you can make any SP-API call. The auth example handles all of this and exports a reusable `spApiRequest()` function used by the other examples.
+That is the whole chain. Amazon removed the SigV4 / IAM-role requirement, so there is no STS AssumeRole step and no request signing. The auth example handles this and exports a reusable `spApiRequest()` function used by the other examples.
+
+One header to get right on top of the token: Amazon's Agent Policy requires software acting on a seller's behalf to identify itself with an `Agent/<your agent name>` token in the user agent of **every** Amazon-bound request — the API calls, the LWA token exchange, and pre-signed report-document downloads alike. Use the agent name from your Solution Provider Portal registration.
 
 ## Common Pitfalls
 
-- **SigV4 signing order matters** — headers must be sorted alphabetically, payload must be SHA256 hashed
-- **STS uses IAM user credentials**, not the temporary credentials — don't mix them up
+- **Amazon labels its own errors** — read `x-amzn-errortype` and `x-amzn-RequestId` off the response instead of guessing from the status code. `x-amzn-RequestId` is the first thing Amazon Support asks for
+- **Error bodies are not always JSON** — read them with `.text()` first. Calling `.json()` on an HTML error page throws a parse error that destroys the HTTP status and Amazon's own message
+- **Per-operation rate limits are published, and lower than you'd guess** — the single-ASIN fee endpoints are 1 req/sec burst 2, while the batch `getMyFeesEstimates` is 0.5 req/sec burst 1. Check the reference page for the operation you call; don't carry one endpoint's limit to another
+- **A 429 means wait, not fail** — retry it after a backoff. Dropping the batch instead turns a throttle into silently missing data
+- **Orders reports ignore `marketplaceIds`** — `GET_FLAT_FILE_ALL_ORDERS_DATA_*` returns the account's orders across every marketplace regardless. Filter on the per-row `sales-channel` column, or you'll mix currencies and double-count
 - **LWA tokens expire in 1 hour** — cache them but refresh before expiry
-- **Report downloads use pre-signed S3 URLs** — no auth headers needed for the download itself
+- **Report downloads use pre-signed S3 URLs** — no auth token needed for the download itself, though the agent user-agent still belongs on it
 - **Reports are GZIP compressed** — decompress before parsing
-- **Solicitations API has strict eligibility windows** — orders must be 5-30 days old
+- **Solicitations API has strict eligibility windows** — orders must be 5-30 days old, and a repeat request comes back as `Unauthorized`, which means "already requested", not an auth failure
 - **Fee estimates need a price** — if you don't provide one, Amazon may return an error
 
 ## Marketplace IDs

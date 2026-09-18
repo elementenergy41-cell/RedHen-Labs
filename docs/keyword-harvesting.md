@@ -114,8 +114,9 @@ auto campaign can be promoted into a product-targeting campaign.
 
 The negation half behaves differently and is covered in
 [`negative-keywords.md`](negative-keywords.md): negative product targets exist
-only at ad-group level on Amazon, while negative keywords can be set at campaign
-level.
+only at ad-group level on Amazon, while a negative keyword can be set at campaign
+level on Sponsored Products — Sponsored Brands takes negative keywords at the ad
+group only.
 
 ---
 

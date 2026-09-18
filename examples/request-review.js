@@ -7,7 +7,9 @@
  *
  * Important constraints:
  *   - Orders must be between 5 and 30 days old (Amazon enforces this)
- *   - Each order can only be solicited once
+ *   - Each order can only be solicited once. A second attempt comes back as
+ *     the code "Unauthorized", which is Amazon's wording for "already
+ *     requested" and not an authentication problem — see INELIGIBLE_CODES below
  *   - Amazon sends their standard template — you cannot customize the message
  *   - Rate limit: ~1 request per second (be conservative)
  *
@@ -28,16 +30,35 @@ const MARKETPLACE_ID = process.env.SP_API_MARKETPLACE_ID || "ATVPDKIKX0DER";
 /**
  * Amazon returns specific error codes when a solicitation can't be sent.
  * These are permanent — retrying won't help.
+ *
+ * Read Amazon's message, not just its code. The Solicitations API reuses
+ * generic-sounding codes for very specific situations, and "Unauthorized" in
+ * particular is not what it sounds like (see below).
  */
 const INELIGIBLE_CODES = new Set([
-  "InvalidInput",           // Bad order ID format
+  "InvalidInput",           // Rejected input — a malformed order ID, or an order outside the eligible window
   "INVALID_ORDER_STATE",    // Order cancelled, returned, etc.
-  "ALREADY_SOLICITED",      // Review already requested for this order
+  "ALREADY_SOLICITED",      // Review already requested for this order (the explicit code; rare in practice)
   "BUYER_OPTED_OUT",        // Buyer has opted out of messages
   "ORDER_NOT_ELIGIBLE",     // Generic ineligibility
-  "Unauthorized",           // Outside 5-30 day window
+  "Unauthorized",           // NOT an auth error — see the note below
   "AccessDenied",           // Missing permissions
 ]);
+
+/**
+ * "Unauthorized" does not mean your token is bad.
+ *
+ * Verified against live FBM orders on 2026-05-27: the response body is
+ * consistently
+ *   { "code": "Unauthorized", "message": "You have already requested a review for this order." }
+ *
+ * So it is Amazon's wording for "this order was already solicited" — by you (and
+ * you lost the success write), by the seller clicking Request a Review in Seller
+ * Central, or by another tool on the same account. Treating it as terminal is
+ * correct in all three cases: a solicitation is one-shot and Amazon will never
+ * accept a second attempt on the same order. If you treat it as an auth failure
+ * you will go hunting a credential problem that does not exist.
+ */
 
 // ---------------------------------------------------------------------------
 // Send a review request

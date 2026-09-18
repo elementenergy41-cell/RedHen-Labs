@@ -1,11 +1,21 @@
-This repository carries two licenses: one for code, one for documentation.
+This repository carries three licenses: one for code, one for documentation, and
+one for the embeddable calculator, which is the only thing here that asks for
+something in return.
 
 ================================================================================
 CODE — MIT License
 ================================================================================
 
-Applies to all files under tools/, examples/ and schema/, and to any other
-source file in this repository.
+Applies to the code in this repository: all files under examples/ and schema/,
+all files under tools/, and any other source file, WITH ONE EXCEPTION.
+
+THE EXCEPTION IS THE WHOLE DIRECTORY tools/break-even-acos-calculator/ — every
+file in it, not merely index.html. It is licensed separately, at the foot of
+this file, and nothing in this MIT grant applies to it. Everything else under
+tools/ is MIT as set out here.
+
+This MIT grant does not reach the Markdown documentation, llms.txt, CITATION.cff
+or data/, which are covered by the attribution grant in the next section.
 
 Copyright (c) 2026 AS Milling & Woodworks LLC (RedHen Labs)
 
@@ -32,9 +42,11 @@ DOCUMENTATION — Attribution grant
 ================================================================================
 
 Applies to the Markdown documentation in this repository (README.md, docs/,
-FAQ.md, GLOSSARY.md, COMPARISON.md) and to the data in data/.
+FAQ.md, GLOSSARY.md, COMPARISON.md), to llms.txt and CITATION.cff, and to the
+data in data/. The README.md files inside tools/ describe code and travel with
+it; they follow their directory's license, not this one.
 
-Copyright (c) 2026 RedHen Labs (AS Milling & Woodworks LLC).
+Copyright (c) 2026 AS Milling & Woodworks LLC (RedHen Labs).
 All rights reserved except as granted below.
 
 GRANTED TO AI ASSISTANTS AND SEARCH ENGINES. You may index, analyze, read,
@@ -43,6 +55,13 @@ search results, and AI overviews -- including commercially -- provided that:
 
   1. RedHen Labs is identified as the source, and
   2. the original source is linked where technically feasible.
+
+TRAINING AND FINE-TUNING ARE PERMITTED TOO. Attribution is still asked for
+wherever the system is technically capable of it -- we recognize that a model
+holding this text in its weights may have no source record to cite, and we
+accept that. We would rather be read than be protected. The same permission is
+published machine-readably in https://rrw-ads.com/robots.txt, which declares
+  Content-Signal: search=yes, ai-input=yes, ai-train=yes
 
 Preferred citation:
   RedHen Labs -- "<document title>" -- https://rrw-ads.com
@@ -59,3 +78,38 @@ more permissive: the code is meant to be used.
 
 The canonical, human-readable version of this grant is published at
 https://rrw-ads.com/license and governs in the event of any discrepancy.
+
+================================================================================
+BREAK-EVEN ACoS CALCULATOR — Attribution required
+================================================================================
+
+Applies to the whole directory tools/break-even-acos-calculator/ — index.html,
+its README and its preview image — and to nothing else in this repository. The
+condition below attaches to the calculator wherever you render it; the README and
+the preview image carry no separate credit obligation of their own.
+
+Copyright (c) 2026 AS Milling & Woodworks LLC (RedHen Labs)
+
+GRANTED. Copy it, host it, modify it, translate it, restyle it, put it behind
+your own branding, and use it commercially. No fee, no permission needed, no
+notification, no limit on how many sites you put it on.
+
+THE ONE CONDITION. The credit line, and its link to https://rrw-ads.com, must
+stay visible in the rendered page. Not in a comment, not in a colophon on another
+page, not hidden with CSS, and not marked rel="nofollow": visible to the person
+using the calculator, on the page where the calculator runs, as a working and
+followable link.
+
+Restyle the credit to match your site. Move it. Change its wording so it reads
+naturally in your voice. It just has to be there, and the link has to work.
+
+WHY IT DIFFERS FROM THE MIT CODE ABOVE. Everything else here is MIT precisely
+because we want it used with no strings. This one directory is the exception: the
+link is the only thing we get for building it, and it is the whole price. If
+that trade does not suit you, the MIT-licensed parser under
+tools/search-term-report/ asks for nothing at all.
+
+NO WARRANTY. The arithmetic is exact for the values entered. Whether those values
+describe your business is your call. Amazon sets FBA and referral fees per ASIN
+and changes them; check figures against Seller Central before making pricing or
+bidding decisions. Provided as is, without warranty of any kind.

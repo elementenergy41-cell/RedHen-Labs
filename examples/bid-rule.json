@@ -2,9 +2,9 @@
   "$schema": "../schema/rule.schema.json",
   "name": "Tiered bid management",
   "type": "bid",
-  "schedule_interval": "1_day",
+  "campaign_ids": ["<campaign id>"],
+  "schedule_interval": "daily",
   "auto_apply": false,
-  "max_bid": 2.50,
   "rules": [
     {
       "name": "Scale proven winners",
@@ -13,7 +13,7 @@
         { "metric": "acos", "operator": "<=", "value": 27 },
         { "metric": "orders", "operator": ">=", "value": 5 }
       ],
-      "action": { "type": "increase_bid", "mode": "percent", "value": 20 },
+      "actions": { "increase_bid_pct": 20, "max_bid": 2.50 },
       "reason": "Converting below target ACoS with enough orders to trust the signal."
     },
     {
@@ -23,7 +23,7 @@
         { "metric": "acos", "operator": ">", "value": 27 },
         { "metric": "orders", "operator": ">=", "value": 5 }
       ],
-      "action": { "type": "decrease_bid", "mode": "target_acos", "value": 27 },
+      "actions": { "cpc_times_acos_ratio": true, "target_acos": 27, "min_bid": 0.30, "max_bid": 2.50 },
       "reason": "The term converts, but above target. Reduce toward target rather than pausing."
     },
     {
@@ -33,7 +33,7 @@
         { "metric": "spend", "operator": ">=", "value": 10 },
         { "metric": "orders", "operator": "=", "value": 0 }
       ],
-      "action": { "type": "set_bid", "mode": "absolute", "value": 0.28 },
+      "actions": { "set_bid_dollar": 0.28 },
       "reason": "Give the keyword a cheaper chance before switching it off."
     },
     {
@@ -43,13 +43,16 @@
         { "metric": "spend", "operator": ">=", "value": 16 },
         { "metric": "orders", "operator": "=", "value": 0 }
       ],
-      "action": { "type": "pause" },
+      "actions": { "pause_targeting": true },
       "reason": "Enough spend to conclude the keyword does not convert."
     }
   ],
   "notes": [
+    "The field is actions, plural, and the action verb is the KEY. There is no type/mode/value triple: percent or dollars is chosen by the key itself, increase_bid_pct against increase_bid_dollar. One verb per rule.",
     "Conditions within a rule are AND-ed.",
-    "max_bid is the ceiling the automation may never exceed. It is the primary safety property, more than undo is.",
-    "Metrics are SUMMED over lookback_days, not averaged. A longer window makes any threshold easier to trip."
+    "max_bid is the ceiling a rule may never exceed, and it is set PER RULE inside that rule's actions. There is no automation-level max_bid. It is the primary safety property, more than undo is: a raising rule with no max_bid of its own runs against a $10.00 default, which is almost certainly not what you want.",
+    "Rule order is precedence. Where two rules would change the same bid, the earlier one wins, so the scaling rule sits above the cutting rules on purpose.",
+    "Metrics are SUMMED over lookback_days, not averaged. A longer window makes any threshold easier to trip. The maximum is 90 days.",
+    "campaign_ids takes Amazon campaign IDs, not campaign names, and at least one is required."
   ]
 }

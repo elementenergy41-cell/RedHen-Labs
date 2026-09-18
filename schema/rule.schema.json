@@ -2,76 +2,171 @@
   "$schema": "https://json-schema.org/draft/2020-12/schema",
   "$id": "https://rrw-ads.com/schema/rule.schema.json",
   "title": "RedHen Labs automation rule",
-  "description": "Shape of an automation in RedHen Labs. Conditions are evaluated over a lookback window; entities satisfying ALL conditions receive the action. Actions are proposals unless auto_apply is true.",
+  "description": "Shape of an automation in RedHen Labs. Conditions are evaluated over a lookback window; entities satisfying ALL conditions receive the action. Actions are proposals unless auto_apply is true. The rule engine as a whole is on the Professional plan, so every automation described here needs it.",
   "type": "object",
-  "required": ["name", "type"],
+  "required": ["name"],
+  "anyOf": [
+    { "required": ["campaign_ids"] },
+    { "required": ["source_campaign_ids"] }
+  ],
   "properties": {
     "name": { "type": "string" },
-    "type": { "enum": ["bid", "harvest", "negative", "budget", "placement", "inventory", "dayparting"] },
-    "schedule_interval": { "type": "string", "examples": ["1_day", "7_days", "14_days"] },
-    "auto_apply": {
-      "type": "boolean", "default": false,
-      "description": "false = propose and wait for approval. true = act unattended (Professional plan; enabled deliberately per automation)."
+    "type": {
+      "enum": ["bid", "harvest", "negative", "budget", "placement", "inventory", "dayparting"],
+      "description": "Which automation this is. NOT a wire field: the API ignores it, because the type is decided by the endpoint you post to (/api/automations, /api/automations/harvest, /api/automations/negative, /api/automations/dayparting, and so on). It is here so a reader can tell which of the fields below apply."
     },
-    "max_bid": {
-      "type": "number", "exclusiveMinimum": 0,
-      "description": "Ceiling the automation may never exceed. The primary safety property."
+    "campaign_ids": {
+      "type": "array",
+      "items": { "type": "string" },
+      "minItems": 1,
+      "description": "Amazon campaign IDs this automation may touch — IDs, never campaign names. Required on every type except harvest, which scopes itself with source_campaign_ids and destination_campaign_match_types instead. A campaign may carry only one bid automation, one negative automation and one dayparting schedule."
+    },
+    "schedule_interval": {
+      "enum": ["daily", "3_days", "7_days", "14_days", "30_days"],
+      "default": "14_days",
+      "description": "How often the automation runs. Anything outside this list is rejected. Budget automations additionally accept \"2_hours\". Dayparting ignores this entirely — it reconciles continuously."
+    },
+    "auto_apply": {
+      "type": "boolean",
+      "default": false,
+      "description": "false = propose and wait for your approval. true = act unattended. Off until you switch it on, one automation at a time."
+    },
+    "status": {
+      "enum": ["active", "paused"],
+      "default": "active",
+      "description": "A paused automation is left in place and stops running. Dayparting accepts it when the automation is created; the other types are paused and resumed afterwards."
     },
     "rules": {
       "type": "array",
+      "maxItems": 20,
+      "description": "Evaluated in array order, and that order IS the precedence: where two rules would change the same field, the earlier one wins.",
       "items": {
         "type": "object",
         "required": ["conditions"],
         "properties": {
-          "name": { "type": "string" },
+          "name": {
+            "type": "string",
+            "description": "For your own reading. The bid endpoint replaces it with the rule's position (\"Rule 1\", \"Rule 2\", ...)."
+          },
           "lookback_days": {
-            "type": "integer", "minimum": 1, "default": 30,
-            "description": "Metrics are SUMMED over this window, not averaged. A longer window makes any threshold easier to trip."
+            "type": "integer", "minimum": 1, "maximum": 90, "default": 7,
+            "description": "Metrics are SUMMED over this window, not averaged. A longer window makes any threshold easier to trip. Hard capped at 90 days: a bid automation is rejected above that, and the harvest and negative engines clamp to it at run time."
           },
           "conditions": {
             "type": "array", "minItems": 1,
-            "description": "ALL conditions must hold (logical AND).",
+            "description": "ALL conditions must hold (logical AND). A metric the target has no data for fails the condition rather than guessing.",
             "items": {
               "type": "object",
               "required": ["metric", "operator", "value"],
               "properties": {
-                "metric": { "enum": ["impressions", "clicks", "spend", "sales", "orders", "acos", "roas", "conversion_rate", "ctr", "cpc"] },
+                "metric": {
+                  "enum": ["impressions", "clicks", "spend", "sales", "orders", "conversions", "acos", "roas", "cvr", "ctr", "cpc", "bid"],
+                  "description": "\"cvr\" is the conversion rate; there is no \"conversion_rate\". \"conversions\" is an alias for orders, and the bid-automation editor does not offer it. \"bid\" is the target's current effective bid."
+                },
                 "operator": { "enum": [">=", ">", "<=", "<", "="] },
                 "value": { "type": ["number", "string"] }
-              }
+              },
+              "additionalProperties": false
             }
           },
-          "action": {
+          "actions": {
             "type": "object",
+            "description": "The action verb is the KEY — there is no separate type/mode/value. Percent or dollars is chosen by the key itself (_pct vs _dollar). One verb per rule: the engine works through the verbs in its own fixed order and acts on the first one present, so a second verb in the same rule is ignored rather than combined. The remaining keys are settings, not verbs.",
             "properties": {
-              "type": { "enum": ["increase_bid", "decrease_bid", "set_bid", "pause", "enable", "add_negative", "add_keyword", "set_budget", "set_placement"] },
-              "mode": { "enum": ["percent", "absolute", "target_acos", "cpc"] },
-              "value": { "type": "number" },
-              "match_types": { "type": "array", "items": { "enum": ["exact", "phrase", "broad"] } },
-              "negative_level": { "enum": ["campaign", "ad_group"], "description": "Negative keywords support both. Negative PRODUCT targets are ad-group only on Amazon." }
-            }
+              "increase_bid_pct": { "type": "number", "description": "Raise the bid by this percentage." },
+              "increase_bid_dollar": { "type": "number", "description": "Raise the bid by this many dollars." },
+              "decrease_bid_pct": { "type": "number", "description": "Lower the bid by this percentage." },
+              "decrease_bid_dollar": { "type": "number", "description": "Lower the bid by this many dollars." },
+              "set_bid_dollar": { "type": "number", "description": "Set the bid to this exact amount. The only action that is not bounded by min_bid or max_bid — the amount you name IS the bid." },
+              "set_bid_to_cpc": { "type": "boolean", "description": "Set the bid to the target's measured CPC. Skipped, with a reason, if the target has no clicks and therefore no CPC." },
+              "cpc_times_acos_ratio": { "type": "boolean", "description": "Set the bid to CPC x (target_acos / actual ACoS). Set target_acos beside it; with none set the engine aims at 30. Skipped if either CPC or actual ACoS is unmeasured." },
+              "bid_times_acos_ratio": { "type": "boolean", "description": "Set the bid to the current bid x (target_acos / actual ACoS). Set target_acos beside it; with none set the engine aims at 30. Skipped if actual ACoS is unmeasured." },
+              "pause_targeting": { "type": "boolean", "description": "Pause the keyword or product target." },
+              "add_negative": { "type": "boolean", "description": "Negative automations. Add the search term as a negative." },
+              "target_acos": { "type": "number", "description": "Setting, not a verb. The ACoS the two ratio actions aim at. Defaults to 30 if omitted." },
+              "min_bid": { "type": "number", "exclusiveMinimum": 0, "description": "Setting, not a verb. Floor for this rule, and it binds in both directions: a floor also pulls a bid UP to reach it. Omitted, increase_bid_pct and increase_bid_dollar run with no floor at all, and every other bounded action falls back to $0.10 — so set it explicitly if you care where the bottom is." },
+              "max_bid": {
+                "type": "number", "exclusiveMinimum": 0,
+                "description": "Setting, not a verb. Ceiling for this rule, applied PER RULE from inside its own actions — there is no automation-level max_bid. THE PRIMARY SAFETY PROPERTY: set it on every rule that raises a bid. Omitted, the engine falls back to $10.00."
+              },
+              "match_type": { "enum": ["exact", "phrase", "broad"], "description": "Negative automations. The single match type to negate at." },
+              "match_types": {
+                "type": "array",
+                "items": { "enum": ["exact", "phrase", "broad"] },
+                "description": "Negative automations only, where it creates one negative per match type listed and is read in preference to match_type. With both absent the engine uses exact. A bid automation does not keep this key."
+              },
+              "negative_level": {
+                "enum": ["campaign", "ad_group"],
+                "description": "A preference, honoured where it changes the outcome. Campaign level applies only to Sponsored Products campaigns with more than one enabled ad group. Sponsored Brands has no campaign-level negative keyword, and a negative PRODUCT target (an ASIN) is ad-group only on Amazon — both are placed at the ad group whatever this says. In a single-ad-group campaign the two levels block identical traffic, so the ad group is used."
+              }
+            },
+            "additionalProperties": false
+          },
+          "action": {
+            "not": {},
+            "description": "NOT A FIELD. The engine reads `actions`, plural, keyed by the action verb. A rule posted with `action` is accepted and stored with an empty actions object: it matches targets and then changes nothing, with no error anywhere. This key must not be present."
+          },
+          "reason": {
+            "type": "string",
+            "description": "Free-text commentary for a human reader. Nothing in the engine reads it."
           }
         }
       }
     },
+    "source_campaign_ids": {
+      "type": "array",
+      "items": { "type": "string" },
+      "minItems": 1,
+      "description": "Harvest only. Amazon campaign IDs to harvest search terms OUT of — IDs, never campaign names."
+    },
+    "destination_campaign_match_types": {
+      "type": "object",
+      "minProperties": 1,
+      "description": "Harvest only. Maps each destination campaign ID to the match types to create there, e.g. {\"123456789\": [\"exact\", \"phrase\"]}. A destination may not also be a source, and may not be an AUTO campaign — AUTO campaigns accept neither keywords nor product targets.",
+      "additionalProperties": {
+        "type": "array",
+        "minItems": 1,
+        "items": { "enum": ["exact", "phrase", "broad"] }
+      }
+    },
+    "default_bid": {
+      "type": "number", "minimum": 0.02, "maximum": 31.00, "default": 0.75,
+      "description": "Harvest only. Starting bid for each keyword created in the destination."
+    },
     "add_negative_to_source": {
       "type": "boolean",
+      "default": true,
       "description": "Harvest only. Add the harvested term as a negative exact in the source campaign. A deliberate choice, not a rule — see docs/negative-keywords.md. The engine will not negate into a campaign that is also a destination."
+    },
+    "timezone": {
+      "enum": ["America/New_York", "America/Chicago", "America/Denver", "America/Los_Angeles"],
+      "description": "Dayparting only. The seller's zone, as an IANA name so daylight saving is handled rather than assumed."
+    },
+    "lead_minutes": {
+      "type": "integer", "minimum": 0, "maximum": 60, "default": 20,
+      "description": "Dayparting only. Both edges of every window are shifted EARLIER by this much, because Amazon propagates a bid change with a delay and writing at the exact boundary loses the edge of the window every day."
     },
     "windows": {
       "type": "array",
-      "description": "Dayparting only. Reconciled continuously, not fired as a schedule; the original bid is restored when a window closes.",
+      "minItems": 1,
+      "description": "Dayparting only. Reconciled continuously, not fired as a schedule; the original bid is restored when a window closes. One window covers ONE day, so a Monday-to-Friday schedule is five windows. Windows may not overlap — two adjustments covering the same minute would fight each other every hour.",
       "items": {
         "type": "object",
+        "required": ["day", "start", "end", "percent"],
         "properties": {
-          "days": { "type": "array", "items": { "enum": ["mon","tue","wed","thu","fri","sat","sun"] } },
-          "start_hour": { "type": "integer", "minimum": 0, "maximum": 23 },
-          "end_hour": { "type": "integer", "minimum": 0, "maximum": 23 },
-          "adjustment": { "type": "object", "properties": { "mode": { "enum": ["percent", "absolute"] }, "value": { "type": "number" } } }
-        }
+          "day": { "type": "integer", "minimum": 0, "maximum": 6, "description": "0 = Sunday, 6 = Saturday." },
+          "start": { "type": "string", "pattern": "^([01]\\d|2[0-3]):[0-5]\\d$", "description": "HH:MM, 24-hour. Minute precision." },
+          "end": { "type": "string", "pattern": "^([01]\\d|2[0-3]):[0-5]\\d$", "description": "HH:MM, 24-hour. May be earlier than start, which means the window crosses midnight. It may not equal start." },
+          "direction": { "enum": ["decrease", "increase"], "default": "decrease" },
+          "percent": {
+            "type": "number", "exclusiveMinimum": 0,
+            "description": "Percent-only; there is no absolute adjustment. An increase is capped at 100 — a window can at most double the bid you set yourself — and a decrease at 99, because 100 is not a bid, it is a pause. Every adjustment is computed from your baseline bid, never from the live bid, so adjustments cannot compound."
+          }
+        },
+        "additionalProperties": false
       }
     },
-    "explanation": { "type": "object", "description": "Human/LLM-readable statement of the decision this rule encodes." },
-    "notes": { "type": "array", "items": { "type": "string" } }
+    "explanation": { "type": "object", "description": "Human/LLM-readable statement of the decision this rule encodes. Documentation only; the API ignores it." },
+    "notes": { "type": "array", "items": { "type": "string" }, "description": "Documentation only; the API ignores it." }
   }
 }

@@ -3,7 +3,11 @@
 **Definition.** Dayparting is adjusting advertising bids by hour of day and day
 of week, so that spend concentrates in the hours a product actually converts.
 
-**Status:** beta.
+**Status:** deployed 2026-08-20, when its reconcile cron went live; the beta
+label was retired 2026-08-30.
+
+**Plan:** Professional ($129/mo) only. Creating a dayparting automation on any
+other plan is refused.
 
 ---
 
@@ -61,9 +65,16 @@ than remaining wherever the last adjustment left them.
 
 ## Scope and limits
 
-- Applies to campaign-level and keyword/target bids
+- Professional plan only
+- Acts on keyword and product-target bids. You scope an automation by campaign —
+  and a campaign may belong to only one dayparting schedule — but what actually
+  moves is the bid on each target inside it. Sponsored Products has no
+  campaign-level bid to move
+- Applies to Sponsored Products and Sponsored Brands campaigns; Sponsored Display
+  is deliberately outside it
 - Timezone is set per automation
-- Currently beta; ad-group-level dayparting is built but not yet enabled
+- Day-of-week selection shipped 2026-09-10
+- Ad-group-level dayparting is built but not yet enabled
 - Interacts with placement modifiers and Amazon's dynamic bidding — see the
   stacking caution in [`amazon-ppc-automation.md`](amazon-ppc-automation.md)
 

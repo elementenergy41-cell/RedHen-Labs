@@ -106,27 +106,47 @@ async function getFbaFees(asin, price, marketplaceId = MARKETPLACE_ID) {
 // ---------------------------------------------------------------------------
 
 /**
- * Fetch FBA fees for multiple ASINs with rate limiting.
+ * Fetch FBA fees for multiple ASINs, one at a time, inside Amazon's rate limit.
  *
- * The Product Fees API has a rate limit of ~10 requests/second.
- * This function processes ASINs in parallel batches with delays.
+ * Amazon publishes a rate limit per OPERATION, and the fee operations are far
+ * slower than they look. The single-ASIN endpoint this example calls
+ * (POST /products/fees/v0/items/{asin}/feesEstimate) is 1 request/sec
+ * sustained, burst 2. The batch endpoint (getMyFeesEstimates, up to 20 ASINs
+ * per call) is 0.5 req/sec, burst 1 — half the rate, not more.
+ *
+ * Read Amazon's reference page for the operation you are actually calling. Do
+ * not assume, and do not carry one endpoint's limit over to another: we paced
+ * the batch endpoint at the single-ASIN rate for four months and silently
+ * dropped whole batches of 20 ASINs, run after run, until we checked.
+ *
+ * Because burst is small, requests are serialized by default rather than run
+ * in parallel, and a 429 is retried after a wait instead of costing you the
+ * result. A throttle should cost time, not data.
  *
  * @param {Array<{asin: string, price: number}>} items - ASINs with prices
  * @param {Object} [options]
- * @param {number} [options.concurrency=5] - Parallel requests per batch
- * @param {number} [options.batchDelayMs=600] - Delay between batches
+ * @param {number} [options.concurrency=1] - Parallel requests per batch
+ * @param {number} [options.batchDelayMs=1100] - Delay between batches
+ * @param {number} [options.retries429=2] - Extra attempts after a 429
+ * @param {number} [options.backoff429Ms=2500] - Wait before retrying a 429
  * @returns {Promise<Object[]>} Array of fee results
  */
 async function getFbaFeesBatch(items, options = {}) {
-  const { concurrency = 5, batchDelayMs = 600 } = options;
+  const {
+    concurrency = 1,
+    batchDelayMs = 1100,
+    retries429 = 2,
+    backoff429Ms = 2500,
+  } = options;
   const results = [];
 
   for (let i = 0; i < items.length; i += concurrency) {
     const batch = items.slice(i, i + concurrency);
 
-    // Process batch in parallel
     const batchResults = await Promise.allSettled(
-      batch.map(({ asin, price }) => getFbaFees(asin, price))
+      batch.map(({ asin, price }) =>
+        withThrottleRetry(() => getFbaFees(asin, price), retries429, backoff429Ms)
+      )
     );
 
     for (const result of batchResults) {
@@ -144,6 +164,29 @@ async function getFbaFeesBatch(items, options = {}) {
   }
 
   return results;
+}
+
+/**
+ * Retry on 429 only.
+ *
+ * A 429 means "wait" — the request was fine and will succeed on a later
+ * attempt. A 400 or 403 is a bad request, or a role your SP-API application has
+ * not been granted (an Amazon application role, nothing to do with AWS), and it
+ * will fail identically every time, so retrying those just burns your rate
+ * budget.
+ */
+async function withThrottleRetry(fn, retries, backoffMs) {
+  let lastErr;
+  for (let attempt = 0; attempt <= retries; attempt++) {
+    try {
+      return await fn();
+    } catch (err) {
+      lastErr = err;
+      if (err.status !== 429 || attempt === retries) break;
+      await sleep(backoffMs);
+    }
+  }
+  throw lastErr;
 }
 
 // ---------------------------------------------------------------------------

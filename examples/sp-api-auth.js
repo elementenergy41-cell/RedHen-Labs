@@ -1,29 +1,34 @@
 /**
- * SP-API Authentication — Full Auth Chain (AWS steps no longer required)
+ * SP-API Authentication — LWA access token, and nothing else
  *
- * ⚠️ READ THIS FIRST — you probably do NOT need steps 2 and 3.
+ * An SP-API request needs exactly one credential: a Login with Amazon (LWA)
+ * access token, sent in the `x-amz-access-token` header. There is no AWS
+ * account, no IAM user, no role to assume and no request signing.
  *
- * Amazon no longer requires AWS SigV4 signing for SP-API. An LWA access token in the
- * `x-amz-access-token` header is sufficient on its own. We verified that against the
- * live API before removing the AWS half from our own production code: LWA token alone
- * returned 200.
+ * This module handles the one step:
+ *   1. LWA token exchange — refresh token -> access token
  *
- * We are leaving the full chain here because it still works and it is genuinely hard
- * to find written down correctly — but if you are building something new, implement
- * step 1 only. Skipping steps 2 and 3 means no IAM user, no role to assume, no
- * rotating access keys, and one fewer credential that can silently expire.
+ * WHY THERE IS NO AWS CODE HERE
  *
- * That last point is not hypothetical. Our AWS access key lapsed on 2026-08-16 and
- * every SP-API call began returning 403 with wording that reads as though each
- * SELLER needs to re-authorize. Four customers looked broken; the actual fault was a
- * single expired credential of ours that the protocol did not need in the first place.
+ * SP-API used to require AWS SigV4 signing, so the chain was
+ * LWA -> STS AssumeRole -> SigV4. Amazon removed that requirement, and we
+ * removed the AWS half from our own production code on 2026-08-16. We verified
+ * it against the live API before deleting anything: a
+ * GET /sellers/v1/marketplaceParticipations carrying only the LWA token
+ * returned HTTP 200.
  *
- * This module handles the three-step authentication:
- *   1. LWA (Login with Amazon) token exchange → access token   ← the only required step
- *   2. STS AssumeRole → temporary AWS credentials              ← optional, legacy
- *   3. SigV4 request signing → signed Authorization header     ← optional, legacy
+ * Deleting it was not tidying. An AWS access key had become a hard dependency
+ * of a protocol that did not need one, and when ours lapsed, every SP-API call
+ * started returning 403 with wording that reads as though each SELLER needs to
+ * re-authorize. Inventory, restock and listings syncs failed for every seller
+ * whose jobs ran in that window; the actual fault was one expired credential of
+ * ours. If you find an older tutorial that walks you through IAM users and role
+ * ARNs, you are reading something that predates the change — you do not need
+ * any of it.
  *
- * No external AWS SDK required — uses only Node.js built-in crypto module.
+ * No AWS SDK and no SP-API client library: this file talks to Amazon with
+ * `fetch` alone. The only external package anywhere in these examples is
+ * `dotenv`, for loading a `.env` file.
  *
  * Usage:
  *   import { spApiRequest } from './sp-api-auth.js';
@@ -31,12 +36,10 @@
  *
  * Environment variables required:
  *   SP_API_CLIENT_ID, SP_API_CLIENT_SECRET — from your SP-API app
- *   AWS_SP_API_ACCESS_KEY_ID, AWS_SP_API_SECRET_ACCESS_KEY — IAM user for STS
- *   AWS_SP_API_ROLE_ARN — IAM role ARN to assume
  *   SP_API_REFRESH_TOKEN — per-user refresh token from OAuth
+ *   SP_API_REGION — NA (default), EU or FE
  */
 
-import crypto from "crypto";
 import "dotenv/config";
 
 // ---------------------------------------------------------------------------
@@ -47,30 +50,40 @@ const config = {
   clientId: process.env.SP_API_CLIENT_ID,
   clientSecret: process.env.SP_API_CLIENT_SECRET,
   refreshToken: process.env.SP_API_REFRESH_TOKEN,
-  awsAccessKeyId: process.env.AWS_SP_API_ACCESS_KEY_ID,
-  awsSecretAccessKey: process.env.AWS_SP_API_SECRET_ACCESS_KEY,
-  roleArn: process.env.AWS_SP_API_ROLE_ARN,
 };
 
-// Region configuration — change these for EU or FE marketplaces
+// Region configuration — change SP_API_REGION for EU or FE marketplaces
 const REGION_CONFIG = {
-  NA: { endpoint: "sellingpartnerapi-na.amazon.com", awsRegion: "us-east-1" },
-  EU: { endpoint: "sellingpartnerapi-eu.amazon.com", awsRegion: "eu-west-1" },
-  FE: { endpoint: "sellingpartnerapi-fe.amazon.com", awsRegion: "us-west-2" },
+  NA: { endpoint: "sellingpartnerapi-na.amazon.com" },
+  EU: { endpoint: "sellingpartnerapi-eu.amazon.com" },
+  FE: { endpoint: "sellingpartnerapi-fe.amazon.com" },
 };
 
 const region = REGION_CONFIG[process.env.SP_API_REGION || "NA"];
+
+/**
+ * Amazon's Agent Policy requires that software acting on behalf of, or at the
+ * instruction of, a seller identify itself in the user agent of every
+ * Amazon-bound request, using the literal form `Agent/[agent name]`. Use the
+ * agent name from your Solution Provider Portal registration in place of
+ * YourAgentName — a name Amazon cannot tie back to your filing does not satisfy
+ * the policy.
+ *
+ * Send it on every Amazon-bound request, not just the API calls: the LWA token
+ * exchange and pre-signed report-document downloads are covered too.
+ */
+export const USER_AGENT =
+  "Agent/YourAgentName SP-API-Example/1.0 (Language=JavaScript; Platform=Node.js)";
 
 // ---------------------------------------------------------------------------
 // Caching — tokens are expensive to fetch, so cache them
 // ---------------------------------------------------------------------------
 
 let lwaCache = { token: null, expiresAt: 0 };
-let stsCache = { creds: null, expiresAt: 0 };
 const EXPIRY_BUFFER_MS = 5 * 60 * 1000; // Refresh 5 minutes before expiry
 
 // ---------------------------------------------------------------------------
-// Step 1: LWA Token Exchange
+// LWA Token Exchange — the whole auth chain
 // ---------------------------------------------------------------------------
 
 /**
@@ -92,7 +105,10 @@ async function getLwaAccessToken() {
 
   const response = await fetch("https://api.amazon.com/auth/o2/token", {
     method: "POST",
-    headers: { "Content-Type": "application/x-www-form-urlencoded" },
+    headers: {
+      "Content-Type": "application/x-www-form-urlencoded",
+      "User-Agent": USER_AGENT,
+    },
     body: body.toString(),
   });
 
@@ -113,193 +129,15 @@ async function getLwaAccessToken() {
 }
 
 // ---------------------------------------------------------------------------
-// Step 2: STS AssumeRole
-// ---------------------------------------------------------------------------
-
-/**
- * Assume an IAM role to get temporary AWS credentials.
- * These credentials are used to SigV4-sign SP-API requests.
- *
- * Important: The STS request itself is signed with your IAM USER credentials,
- * not the temporary credentials. This is a common point of confusion.
- */
-async function getStsCredentials() {
-  // Return cached credentials if still valid
-  if (stsCache.creds && Date.now() < stsCache.expiresAt - EXPIRY_BUFFER_MS) {
-    return stsCache.creds;
-  }
-
-  const now = new Date();
-  const amzDate = toAmzDate(now);
-  const dateStamp = amzDate.slice(0, 8);
-
-  // STS request body
-  const body = new URLSearchParams({
-    Action: "AssumeRole",
-    Version: "2011-06-15",
-    RoleArn: config.roleArn,
-    RoleSessionName: `sp-api-${Date.now()}`,
-    DurationSeconds: "3600",
-  }).toString();
-
-  // Headers for the STS request
-  const headers = {
-    "content-type": "application/x-www-form-urlencoded",
-    host: "sts.amazonaws.com",
-    "x-amz-date": amzDate,
-  };
-
-  // Sign the STS request with IAM USER credentials (not temporary creds)
-  signRequest({
-    method: "POST",
-    path: "/",
-    headers,
-    body,
-    service: "sts",
-    region: "us-east-1",
-    accessKeyId: config.awsAccessKeyId,
-    secretAccessKey: config.awsSecretAccessKey,
-    amzDate,
-    dateStamp,
-  });
-
-  const response = await fetch("https://sts.amazonaws.com/", {
-    method: "POST",
-    headers,
-    body,
-  });
-
-  if (!response.ok) {
-    const text = await response.text();
-    throw new Error(`STS AssumeRole failed (${response.status}): ${text}`);
-  }
-
-  const xml = await response.text();
-
-  // Parse the XML response (simple extraction — no XML parser needed)
-  const creds = {
-    accessKeyId: xmlValue(xml, "AccessKeyId"),
-    secretAccessKey: xmlValue(xml, "SecretAccessKey"),
-    sessionToken: xmlValue(xml, "SessionToken"),
-    expiration: xmlValue(xml, "Expiration"),
-  };
-
-  if (!creds.accessKeyId) {
-    throw new Error("STS response missing credentials");
-  }
-
-  // Cache the credentials
-  stsCache = {
-    creds,
-    expiresAt: new Date(creds.expiration).getTime(),
-  };
-
-  return creds;
-}
-
-/** Extract a value from XML by tag name */
-function xmlValue(xml, tag) {
-  const match = xml.match(new RegExp(`<${tag}>([^<]+)</${tag}>`));
-  return match ? match[1] : null;
-}
-
-// ---------------------------------------------------------------------------
-// Step 3: SigV4 Request Signing
-// ---------------------------------------------------------------------------
-
-/**
- * AWS Signature Version 4 signing.
- *
- * This is the core of AWS authentication. Every SP-API request must be signed
- * with this algorithm. The signature proves you have valid AWS credentials
- * without transmitting the secret key.
- *
- * The function modifies the headers object in-place, adding the Authorization header.
- */
-function signRequest({
-  method,
-  path,
-  queryString,
-  headers,
-  body,
-  service,
-  region: sigRegion,
-  accessKeyId,
-  secretAccessKey,
-  amzDate,
-  dateStamp,
-}) {
-  // Step 3a: Build the canonical request
-  // Headers MUST be sorted alphabetically — this is critical
-  const sortedHeaderKeys = Object.keys(headers).sort();
-  const canonicalHeaders =
-    sortedHeaderKeys.map((k) => `${k}:${headers[k]}`).join("\n") + "\n";
-  const signedHeaders = sortedHeaderKeys.join(";");
-  const payloadHash = sha256(body || "");
-
-  const canonicalRequest = [
-    method,
-    path,
-    queryString || "",
-    canonicalHeaders,
-    signedHeaders,
-    payloadHash,
-  ].join("\n");
-
-  // Step 3b: Create the string to sign
-  const credentialScope = `${dateStamp}/${sigRegion}/${service}/aws4_request`;
-  const stringToSign = [
-    "AWS4-HMAC-SHA256",
-    amzDate,
-    credentialScope,
-    sha256(canonicalRequest),
-  ].join("\n");
-
-  // Step 3c: Derive the signing key (4 rounds of HMAC)
-  const kDate = hmac(`AWS4${secretAccessKey}`, dateStamp);
-  const kRegion = hmac(kDate, sigRegion);
-  const kService = hmac(kRegion, service);
-  const kSigning = hmac(kService, "aws4_request");
-
-  // Step 3d: Calculate the signature
-  const signature = hmac(kSigning, stringToSign, "hex");
-
-  // Step 3e: Add the Authorization header
-  headers["authorization"] =
-    `AWS4-HMAC-SHA256 Credential=${accessKeyId}/${credentialScope}, ` +
-    `SignedHeaders=${signedHeaders}, Signature=${signature}`;
-}
-
-// ---------------------------------------------------------------------------
-// Crypto helpers
-// ---------------------------------------------------------------------------
-
-function sha256(data) {
-  return crypto.createHash("sha256").update(data, "utf8").digest("hex");
-}
-
-function hmac(key, data, encoding) {
-  const keyBuffer = typeof key === "string" ? Buffer.from(key, "utf8") : key;
-  const h = crypto.createHmac("sha256", keyBuffer).update(data, "utf8");
-  return encoding ? h.digest(encoding) : h.digest();
-}
-
-function toAmzDate(date) {
-  return date.toISOString().replace(/[-:]/g, "").split(".")[0] + "Z";
-}
-
-// ---------------------------------------------------------------------------
 // Main: spApiRequest() — make authenticated SP-API calls
 // ---------------------------------------------------------------------------
 
 /**
  * Make an authenticated SP-API request.
  *
- * Handles the full auth chain automatically:
  *   1. Gets (or refreshes) an LWA access token
- *   2. Gets (or refreshes) STS temporary credentials
- *   3. Signs the request with SigV4
- *   4. Sends the request and returns the parsed response
+ *   2. Sends the request with that token in the x-amz-access-token header
+ *   3. Returns the parsed response
  *
  * @param {string} method - HTTP method (GET, POST, PUT, DELETE)
  * @param {string} path - API path (e.g., '/orders/v0/orders')
@@ -309,13 +147,8 @@ function toAmzDate(date) {
  * @returns {Promise<Object>} Parsed JSON response
  */
 export async function spApiRequest(method, path, { body, queryParams } = {}) {
-  // Step 1: Get LWA access token
   const accessToken = await getLwaAccessToken();
 
-  // Step 2: Get STS temporary credentials
-  const stsCreds = await getStsCredentials();
-
-  // Build sorted query string (SigV4 requires sorted params)
   let queryString = "";
   if (queryParams) {
     queryString = Object.keys(queryParams)
@@ -324,42 +157,20 @@ export async function spApiRequest(method, path, { body, queryParams } = {}) {
       .join("&");
   }
 
-  const now = new Date();
-  const amzDate = toAmzDate(now);
-  const dateStamp = amzDate.slice(0, 8);
   const bodyStr = body ? JSON.stringify(body) : "";
 
-  // Build headers — these are included in the signature
+  // The LWA access token is the only credential. No signature, no session
+  // token, no date header to get wrong.
   const headers = {
     host: region.endpoint,
     "x-amz-access-token": accessToken,
-    "x-amz-date": amzDate,
-    "x-amz-security-token": stsCreds.sessionToken,
+    "user-agent": USER_AGENT,
   };
 
   if (body) {
     headers["content-type"] = "application/json";
   }
 
-  // Sign the request with STS TEMPORARY credentials
-  signRequest({
-    method,
-    path,
-    queryString,
-    headers,
-    body: bodyStr,
-    service: "execute-api",
-    region: region.awsRegion,
-    accessKeyId: stsCreds.accessKeyId,
-    secretAccessKey: stsCreds.secretAccessKey,
-    amzDate,
-    dateStamp,
-  });
-
-  // User-agent is added AFTER signing (not part of signature)
-  headers["user-agent"] = "RedHenLabs-SP-API-Example/1.0";
-
-  // Build the full URL
   const url = `https://${region.endpoint}${path}${queryString ? "?" + queryString : ""}`;
 
   const response = await fetch(url, {
@@ -368,23 +179,48 @@ export async function spApiRequest(method, path, { body, queryParams } = {}) {
     body: bodyStr || undefined,
   });
 
+  // Read failures as TEXT, before any JSON parsing.
+  //
+  // SP-API does not always answer with JSON — an edge 429, an HTML error page
+  // or an empty body will all throw a SyntaxError if you call .json() first,
+  // and that error destroys the HTTP status and Amazon's own message along
+  // with it. You end up debugging "Unexpected token <" instead of reading
+  // "403 AccessDeniedException".
+  //
+  // Amazon also classifies its own errors. `x-amzn-errortype` carries the
+  // exception class and `x-amzn-RequestId` is the first thing Amazon Support
+  // asks for. Keep both instead of guessing from the status code.
+  if (!response.ok) {
+    const errorText = await response.text();
+    const error = new Error(
+      `SP-API ${method} ${path} failed (${response.status}): ${errorText}`
+    );
+    error.status = response.status;
+    error.responseBody = errorText;
+    error.amznErrorType = response.headers.get("x-amzn-errortype");
+    error.amznRequestId = response.headers.get("x-amzn-RequestId");
+    // Best effort only — callers that want Amazon's structured
+    // { errors: [{ code, message }] } shape can read error.response, but a body
+    // that is not JSON leaves it undefined rather than throwing.
+    try {
+      error.response = JSON.parse(errorText);
+    } catch {
+      // Not JSON. errorText still has everything Amazon said.
+    }
+    throw error;
+  }
+
   // Handle empty responses (201 Created, 204 No Content)
   if (response.status === 201 || response.status === 204) {
     return { status: response.status };
   }
 
-  const responseData = await response.json();
-
-  if (!response.ok) {
-    const error = new Error(
-      `SP-API ${method} ${path} failed (${response.status}): ${JSON.stringify(responseData)}`
-    );
-    error.status = response.status;
-    error.response = responseData;
-    throw error;
+  const contentType = response.headers.get("content-type");
+  if (!contentType?.includes("json")) {
+    return { status: response.status };
   }
 
-  return responseData;
+  return response.json();
 }
 
 // ---------------------------------------------------------------------------
@@ -394,18 +230,14 @@ export async function spApiRequest(method, path, { body, queryParams } = {}) {
 const isMainModule = process.argv[1]?.endsWith("sp-api-auth.js");
 if (isMainModule) {
   (async () => {
-    console.log("Testing SP-API auth chain...\n");
+    console.log("Testing SP-API auth...\n");
 
     try {
       console.log("1. LWA token exchange...");
       const token = await getLwaAccessToken();
       console.log(`   OK — token: ${token.slice(0, 20)}...`);
 
-      console.log("2. STS AssumeRole...");
-      const creds = await getStsCredentials();
-      console.log(`   OK — access key: ${creds.accessKeyId}`);
-
-      console.log("3. Test SP-API call (GET /sellers/v1/marketplaceParticipations)...");
+      console.log("2. Test SP-API call (GET /sellers/v1/marketplaceParticipations)...");
       const result = await spApiRequest("GET", "/sellers/v1/marketplaceParticipations");
       const marketplaces = result.payload || [];
       console.log(`   OK — found ${marketplaces.length} marketplace(s):`);
@@ -414,7 +246,7 @@ if (isMainModule) {
         console.log(`   - ${m.name} (${m.id}) — ${m.countryCode}`);
       }
 
-      console.log("\nAll auth steps passed.");
+      console.log("\nAuth passed.");
     } catch (err) {
       console.error("\nAuth test failed:", err.message);
       process.exit(1);

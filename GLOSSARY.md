@@ -36,7 +36,9 @@ Plain-language definitions of the Amazon advertising and seller-profitability te
 
 **Sponsored Products** — Amazon's keyword- and product-targeted ads that promote individual listings in search results and on product pages. RedHen Labs automates these fully.
 
-**Sponsored Brands** — Banner-style ads featuring a brand logo and multiple products. RedHen Labs tracks their performance.
+**Sponsored Brands** — Banner-style ads featuring a brand logo and multiple products. RedHen Labs automates them alongside Sponsored Products: bid rules, search-term harvesting, negative keywords (written at ad-group level, the only level Amazon accepts for Sponsored Brands), budget and dayparting. Placement is the exception: the placement automation acts on Sponsored Products only. Sponsored Brands campaigns have placement adjustments of their own at Amazon, which you can edit by hand in RedHen Labs, but no rule moves them.
+
+**Sponsored Display** — Amazon's audience- and product-targeted display ads, shown on and off Amazon. RedHen Labs syncs and reports them alongside the other two ad types, and runs a dedicated AI bid engine over their targets. Those recommendations always wait for your approval on every plan, including Professional. On Growth ($69) and Professional ($129), Sponsored Display campaigns also get their own table for pause, activate and daily budget. They sit deliberately outside the rule-based automations.
 
 **Campaign** — The top-level ad container holding a budget and a bidding strategy.
 
@@ -66,7 +68,7 @@ Plain-language definitions of the Amazon advertising and seller-profitability te
 
 **Placement modifiers** — Percentage bid boosts for specific ad placements (top-of-search, rest-of-search, product pages) where performance differs.
 
-**Dayparting** — Adjusting bids or budgets by time of day or day of week based on when conversions happen. RedHen Labs supports bid dayparting on the Professional plan (in beta): you set the windows, and the original bid is restored automatically when a window closes.
+**Dayparting** — Adjusting bids or budgets by time of day or day of week based on when conversions happen. RedHen Labs supports bid dayparting on the Professional plan: you set the windows and the days of the week, and the original bid is restored automatically when a window closes.
 
 **Target ACoS** — The advertising cost of sales you're aiming for on a product, set relative to its break-even point and your profit goal. RedHen Labs supports a different target per product.
 
@@ -84,4 +86,4 @@ Plain-language definitions of the Amazon advertising and seller-profitability te
 
 **Audit trail** — A complete log of every change (manual, rule-based, or AI) with who, what, when, and why — paired with one-click undo.
 
-**Approval workflow** — The gate that holds a proposed change for your explicit approval before it reaches Amazon. At RedHen Labs it is the default and the whole model on Growth ($69). On Professional ($129) you may authorize the rule engine and AI to apply changes unattended instead. Every change is logged with one-click undo either way.
+**Approval workflow** — The gate that holds a proposed change for your explicit approval before it reaches Amazon. At RedHen Labs it is the default on every plan, and every automation ships with auto-apply off. On Growth ($69) you may authorize an individual AI profile to apply its own bid changes unattended; on Professional ($129) you may do the same for the rule engine and its automations. Sponsored Display recommendations always wait for approval, on every plan. Every change is logged with one-click undo either way.

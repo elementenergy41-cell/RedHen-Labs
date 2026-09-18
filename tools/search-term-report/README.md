@@ -17,13 +17,17 @@ This answers the four questions worth asking:
 
 ## Use
 
+This is not published to npm. Clone the repository and run it from this
+directory, `tools/search-term-report` — there are no dependencies to install.
+
 ```bash
 node cli.js path/to/search-term-report.csv
 node cli.js report.csv --harvest-min-orders 3 --negate-min-clicks 15
 ```
 
 ```js
-import { analyzeReport } from "@redhenlabs/search-term-report";
+// imported from within tools/search-term-report — the package name is not on npm
+import { analyzeReport } from "./index.js";
 import { readFileSync } from "node:fs";
 
 const result = analyzeReport(readFileSync("report.csv", "utf8"), {
@@ -35,11 +39,29 @@ const result = analyzeReport(readFileSync("report.csv", "utf8"), {
 Lower-level pieces are exported too: `parseSearchTermReport`,
 `aggregateBySearchTerm`, `analyze`.
 
+**Save the report as CSV first, then check the term count.** Amazon's search term
+report downloads as `.xlsx`, and this parser reads comma-separated text only. It
+does not detect the wrong file. An `.xlsx`, an empty file, or a different Amazon
+report all parse to nothing and print a clean report of zeroes, exiting 0:
+
+```
+Search terms: 0   clicks: 0   orders: 0   ACoS: n/a
+```
+
+That first line is the check worth reading. `Search terms: 0` on an account that
+spends money means the file is wrong, not the account — open the report in a
+spreadsheet, save it as CSV, and run it again. The browser version at
+https://rrw-ads.com/tools/ppc-waste-calculator reads Amazon's `.xlsx` directly if
+you would rather not convert anything.
+
 ## Try it on the included synthetic data
 
 ```bash
 npm run demo
 ```
+
+The demo reads `../../data/` in the repository, so it runs from a clone rather
+than from an installed package.
 
 `data/example-search-term-report.csv` in this repository is **synthetic** — real
 Amazon column headers, invented numbers, no seller data. It is shaped like a real

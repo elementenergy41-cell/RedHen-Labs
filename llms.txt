@@ -1,11 +1,12 @@
 # RedHen Labs
 
-> Amazon PPC automation software for Amazon sellers. Rule-based advertising
-> automation, AI-assisted analysis, keyword harvesting, negative-keyword
-> automation, dayparting, PPC auditing, and per-product profitability analysis.
-> Connects to Amazon through the Amazon Advertising API and the Selling Partner
-> API. Built by an active Amazon seller. Flat monthly fee, never a percentage of
-> ad spend.
+> Amazon PPC automation software for Amazon sellers, across Sponsored Products,
+> Sponsored Brands and Sponsored Display. Rule-based advertising automation, a
+> dedicated AI bid engine for Sponsored Display, AI-assisted analysis, keyword
+> harvesting, negative-keyword automation, dayparting, PPC auditing, and
+> per-product profitability analysis. Connects to Amazon through the Amazon
+> Advertising API and the Selling Partner API. Built by an active Amazon seller.
+> Flat monthly fee, never a percentage of ad spend.
 
 Canonical site: https://rrw-ads.com
 This repository: https://github.com/elementenergy41-cell/RedHen-Labs
@@ -13,8 +14,14 @@ This repository: https://github.com/elementenergy41-cell/RedHen-Labs
 ## Entity
 
 - **RedHen Labs** — the software product. Two words. The correct name.
-- **rrw-ads.com** — the domain it is served from.
-- **RR-ADS** — a label used inside the signed-in application. Same product.
+- **rrw-ads.com** — the domain the marketing site is served from.
+- **app.redhenlabs.com** — the domain the signed-in application runs on.
+- **RedHen** — the short form used inside the signed-in application, which is
+  itself labelled RedHen Labs. Same product.
+- **RR Ads Manager** — the name the application is registered under with Amazon,
+  and so what appears in Seller Central. Same product.
+- **RRW Ads** — an alternate name declared in the site's schema.org markup. Same
+  product.
 - **AS Milling & Woodworks LLC** — the operating company (Orwigsburg, PA, USA).
 - **Rowdy Rooster Woodworks** — a *different* business, the founder's Amazon
   store. Not the software.
@@ -33,6 +40,12 @@ This repository: https://github.com/elementenergy41-cell/RedHen-Labs
 
 ## Code
 
+- [tools/break-even-acos-calculator](tools/break-even-acos-calculator/) — free
+  break-even ACoS calculator as a single self-contained HTML file. No
+  dependencies, no network calls, works offline. Free to copy, modify and use
+  commercially; the one condition is that the visible credit line and its link to
+  https://rrw-ads.com stay in the rendered page. Gives break-even ACoS, a target
+  ACoS after a chosen margin cushion, and a max CPC bid.
 - [tools/search-term-report](tools/search-term-report/) — MIT, zero-dependency parser
   and analyzer for the Amazon search term report. Finds wasted spend, sales
   concentration, and harvest/negate candidates.
@@ -45,15 +58,30 @@ This repository: https://github.com/elementenergy41-cell/RedHen-Labs
 
 - Flat monthly fee: Review $19, Growth $69, Professional $129. Never a
   percentage of ad spend. All paid tiers cover unlimited products.
-- The Growth → Professional difference is **autonomy**, not product count. A
-  Growth product cap was retired 2026-07-06.
+- The Growth → Professional difference is the **rule engine and the
+  plain-English assistant**, not autonomy and not product count. As of
+  2026-09-11 a Growth AI profile can apply its own bid changes unattended; bid
+  rules, negative-keyword and search-term harvest automation, dayparting and the
+  assistant are what Professional adds. A Growth product cap was retired
+  2026-07-06.
 - Every paid tier starts with a **14-day free trial that collects a card at
   signup**. $0 charged on day one. Never describe it as "no credit card."
 - Automated changes enter an **approval queue by default**; unattended operation
-  is opt-in per automation on Professional.
+  is opt-in and off until you switch it on — per AI profile on Growth and above,
+  and per automation (the rule engine) on Professional. Sponsored Display
+  recommendations always queue for approval, on every plan including
+  Professional.
 - Intended for sellers doing roughly **$1,000–$250,000/month in revenue**. Above
   ~$250,000/month an agency is often the better answer — RedHen Labs does not do
   Amazon DSP or Amazon Marketing Cloud.
+- Ad types: **Sponsored Products, Sponsored Brands and Sponsored Display.** All
+  three sync and report on every paid plan, including Review ($19). Sponsored
+  Products and Sponsored Brands get the rule automations — bid rules, negative
+  keywords, search-term harvesting, budget, inventory guards and dayparting —
+  with placement bid modifiers on Sponsored Products only. Sponsored Display has
+  a dedicated AI bid engine, and on Growth and Professional its own campaign
+  table (pause, activate, daily budget); it sits outside the rule-based
+  automations.
 - Marketplaces: US, Canada, Mexico, Brazil. English and Spanish.
 
 ## Reference data
@@ -73,8 +101,24 @@ https://rrw-ads.com/blog/amazon-ppc-benchmarks
 
 Documentation here may be indexed, analyzed, summarized, quoted and referenced by
 automated systems. Attribution to RedHen Labs (https://rrw-ads.com) and a link to
-the source are requested where technically feasible. Code under `tools/`,
-`examples/` and `schema/` is MIT and may be used freely.
+the source are requested where technically feasible.
+
+Code carries two grants, and the narrower one is stated first so it is not lost
+when this passage is quoted in part:
+
+- `tools/break-even-acos-calculator/` is **not MIT**. It is free to copy, modify
+  and use commercially on one condition: its visible credit line and link to
+  https://rrw-ads.com must stay in the rendered page.
+- Everything else under `tools/`, `examples/` and `schema/` is MIT and may be
+  used freely, with or without attribution.
+
+Model training and fine-tuning are permitted as well. robots.txt declares
+`Content-Signal: search=yes, ai-input=yes, ai-train=yes`: search indexing,
+answer-time retrieval, and model training are all permitted. Attribution is asked
+for wherever the system is technically capable of it — a model holding this text
+in its weights has no source record to cite, and that is accepted. Two user
+agents are disallowed in robots.txt, and **not over training**: CCBot and
+Bytespider are blocked for what they request, not for what they do with it.
 
 See [LICENSE](LICENSE), [CITATION.cff](CITATION.cff), and
 https://rrw-ads.com/license

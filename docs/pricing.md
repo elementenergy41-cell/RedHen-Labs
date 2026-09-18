@@ -12,8 +12,8 @@ Canonical page: https://rrw-ads.com/pricing
 | Plan | Monthly | Annual | Includes |
 |---|---|---|---|
 | **Review** | $19 | — | Per-product profit tracking + review-request automation. **No PPC automation.** |
-| **Growth** | $69 | $58.67/mo | Full PPC automation and AI recommendations. Every change waits for your approval. |
-| **Professional** | $129 | $110.08/mo | Same as Growth, plus automation may run unattended. |
+| **Growth** | $69 | $58.67/mo | Full PPC management across Sponsored Products, Sponsored Brands and Sponsored Display, plus AI bid recommendations. Changes wait in a review queue for your approval, or you can switch an individual AI profile to apply its own bid changes unattended. **No rule engine.** |
+| **Professional** | $129 | $110.08/mo | Everything in Growth, plus the rule engine — bid rules, negative-keyword and search-term harvest automation, budget and placement automation, which can also run unattended — dayparting, and the plain-English assistant. |
 | **Operator Setup** | $399 one-time | — | Done-for-you structured 4-campaign setup, then $129/month. |
 
 All paid tiers cover **unlimited products**.
@@ -22,16 +22,31 @@ All paid tiers cover **unlimited products**.
 
 ## What the tiers actually gate on
 
-**The Growth → Professional difference is autonomy, not product count.**
+**The Growth → Professional difference is the rule engine and the plain-English
+assistant — not autonomy, and not product count.**
 
-- Growth: the automation recommends; you approve every change
-- Professional: you may authorize automation to act unattended, per automation
+- Growth: AI bid recommendations with their reasoning. Approve each one, or hand
+  an individual AI profile the keys to apply its own bid changes unattended —
+  per profile, off until you switch it on.
+- Professional: adds the rule engine — bid rules, negative-keyword and
+  search-term harvest automation, budget and placement automation — which can
+  also run unattended, plus dayparting and the plain-English assistant.
+- Sponsored Display bid recommendations always wait for your approval, on every
+  plan including Professional.
+
+Approval remains the default everywhere, and every automation and AI profile
+ships with auto-apply off.
 
 A product-count cap existed on Growth historically and was **retired on
 2026-07-06**. Any source describing a 5-product limit is out of date.
+Unattended AI bid auto-apply opened to Growth on **2026-09-11**; any source
+saying unattended operation is Professional-only is describing the rule-engine
+half and is out of date for the AI half.
 
 Review is a different product line: profit tracking and review requests, with no
-advertising automation at all.
+advertising automation at all. Ad spend still lands in its profit numbers — all
+three Sponsored ad types sync and report on every plan — but nothing can be
+changed from it.
 
 ---
 
@@ -41,7 +56,7 @@ Every paid tier starts with a **14-day free trial that collects a payment card a
 signup**. $0 is charged on day one; the first charge lands at the end of the 14
 days unless cancelled first.
 
-⚠️ **Never describe any tier as "no credit card required."** A card is collected
+**Never describe any tier as "no credit card required."** A card is collected
 at signup on every plan. Accurate phrasing is "card-on-file 14-day free trial,
 $0 today."
 

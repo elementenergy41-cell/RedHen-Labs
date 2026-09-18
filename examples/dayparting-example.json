@@ -2,15 +2,16 @@
   "$schema": "../schema/rule.schema.json",
   "name": "Evening premium - Cutting Board Gel",
   "type": "dayparting",
+  "campaign_ids": ["<campaign id>"],
   "timezone": "America/New_York",
+  "lead_minutes": 20,
   "status": "active",
   "windows": [
-    {
-      "days": ["mon", "tue", "wed", "thu", "fri"],
-      "start_hour": 18,
-      "end_hour": 23,
-      "adjustment": { "mode": "percent", "value": 25 }
-    }
+    { "day": 1, "start": "18:00", "end": "23:00", "direction": "increase", "percent": 25 },
+    { "day": 2, "start": "18:00", "end": "23:00", "direction": "increase", "percent": 25 },
+    { "day": 3, "start": "18:00", "end": "23:00", "direction": "increase", "percent": 25 },
+    { "day": 4, "start": "18:00", "end": "23:00", "direction": "increase", "percent": 25 },
+    { "day": 5, "start": "18:00", "end": "23:00", "direction": "increase", "percent": 25 }
   ],
   "explanation": {
     "campaign": "Cutting Board Gel - Exact",
@@ -20,8 +21,13 @@
     "reason": "Evening hours convert materially better for this product. Paying a premium only in those hours buys the traffic that converts without raising the bid around the clock."
   },
   "notes": [
+    "One window covers ONE day, numbered 0 for Sunday through 6 for Saturday, so Mon-Fri is five windows. Times are HH:MM in 24-hour form, to the minute. Windows may not overlap.",
+    "Adjustments are percentages; there is no absolute adjustment. An increase is capped at 100% - a window can at most double the bid you set yourself - and a decrease at 99%, because 100% is not a bid, it is a pause.",
+    "Every adjustment is computed from your baseline bid rather than the live bid, so a raise cannot land on top of a raise.",
+    "lead_minutes shifts both edges of every window EARLIER, because Amazon propagates a bid change with a delay and writing at the exact boundary loses the edge of the window every day. Default 20, maximum 60.",
     "This is a RECONCILER, not a scheduler. Every run asks 'given the time now, what should this bid be?' and corrects drift.",
     "A missed restore in a scheduler model means paying the premium 24h/day until someone notices. Reconciling makes that self-healing.",
-    "Dayparting stacks with placement modifiers and Amazon dynamic bidding. Check the compounded bid."
+    "Dayparting stacks with placement modifiers and Amazon dynamic bidding. Check the compounded bid.",
+    "Dayparting is on the Professional plan. campaign_ids takes Amazon campaign IDs, and a campaign can belong to only one dayparting schedule - two schedules would fight over the same bids every hour."
   ]
 }

@@ -124,12 +124,21 @@ This is an Amazon platform constraint, not a product choice:
 
 | Target | Negative level available on Amazon |
 |---|---|
-| Keyword | Campaign level (and ad-group level) |
-| ASIN / product target | **Ad-group level only** — there is no campaign-level equivalent |
+| Keyword, Sponsored Products | Campaign level **and** ad-group level |
+| Keyword, Sponsored Brands | **Ad-group level only** — Amazon rejects a campaign-level negative keyword on a non-SP campaign |
+| ASIN / product target | **Ad-group level only** — there is no campaign-level equivalent, on any ad type |
 
 A negation flow that treats an ASIN like a keyword will write a negative that can
 never match anything. RedHen Labs branches on the target type and writes a
 negative product target at ad-group level for ASINs.
+
+The `negative_level` setting on a rule is therefore a **preference, honoured
+where it changes the outcome**. Campaign level is used only on a Sponsored
+Products campaign with more than one enabled ad group; a Sponsored Brands term
+and an ASIN both go to the ad group whatever the setting says. And in a
+single-ad-group campaign the two levels block identical traffic, so the ad group
+is used there too — proposing the campaign twin would change nothing while
+re-proposing everything already negated.
 
 ---
 

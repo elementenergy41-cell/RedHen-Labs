@@ -2,6 +2,7 @@
   "$schema": "../schema/rule.schema.json",
   "name": "Negate search terms that do not convert",
   "type": "negative",
+  "campaign_ids": ["<campaign id>"],
   "schedule_interval": "7_days",
   "auto_apply": false,
   "rules": [
@@ -12,8 +13,8 @@
         { "metric": "clicks", "operator": ">=", "value": 20 },
         { "metric": "orders", "operator": "=", "value": 0 }
       ],
-      "action": {
-        "type": "add_negative",
+      "actions": {
+        "add_negative": true,
         "match_types": ["exact"],
         "negative_level": "campaign"
       }
@@ -23,12 +24,15 @@
     "search_term": "wood stain remover",
     "clicks_30d": 24,
     "orders_30d": 0,
-    "action": "Add as negative-exact at campaign level",
+    "action": "Add as negative-exact, at campaign level where that is available",
     "reason": "Sufficient clicks to conclude the term does not convert for this product. Blocking it stops further spend without affecting adjacent terms."
   },
   "notes": [
+    "The field is actions, plural, and the action verb is the KEY: add_negative, not action.type.",
     "clicks >= 20 is what makes orders = 0 meaningful. Zero orders on two clicks is not evidence.",
     "Negative EXACT blocks one term. Negative PHRASE removes a whole family and is rarely correct.",
-    "ASINs differ: negative product targets exist only at ad-group level on Amazon, never campaign level."
+    "negative_level is a preference, honoured where it changes the outcome. Campaign level applies only to Sponsored Products campaigns with more than one enabled ad group. Sponsored Brands has no campaign-level negative keyword at all. In a single-ad-group campaign both levels block identical traffic, so the ad group is used.",
+    "ASINs differ: negative product targets exist only at ad-group level on Amazon, never campaign level, so an ASIN is placed at the ad group whatever negative_level says.",
+    "campaign_ids takes Amazon campaign IDs, not campaign names. A campaign may carry only one negative automation."
   ]
 }

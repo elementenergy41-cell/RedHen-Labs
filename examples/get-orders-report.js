@@ -17,7 +17,7 @@
  *   node get-orders-report.js --report-type GET_MERCHANT_LISTINGS_ALL_DATA
  */
 
-import { spApiRequest } from "./sp-api-auth.js";
+import { spApiRequest, USER_AGENT } from "./sp-api-auth.js";
 import zlib from "zlib";
 import { promisify } from "util";
 import "dotenv/config";
@@ -60,6 +60,12 @@ const REPORT_TYPES = {
 async function createReport(reportType, { startDate, endDate } = {}) {
   const body = {
     reportType,
+    // The orders report IGNORES marketplaceIds. GET_FLAT_FILE_ALL_ORDERS_DATA_*
+    // returns the seller account's whole order stream across every marketplace
+    // no matter what you pass here. The per-row `sales-channel` column
+    // (Amazon.com, Amazon.ca, Amazon.com.mx ...) is the only signal of which
+    // marketplace a row actually belongs to — filter on it, or you will mix
+    // currencies and double-count orders once you run this per marketplace.
     marketplaceIds: [MARKETPLACE_ID],
   };
 
@@ -136,6 +142,10 @@ async function pollReport(reportId) {
  * The download itself doesn't need authentication — the URL is self-authenticating.
  * Most reports are GZIP compressed and need to be decompressed before parsing.
  *
+ * It still needs the agent user-agent. Amazon's Agent Policy covers all
+ * HTTP/HTTPS requests, document downloads included, and the S3 signature covers
+ * the host and query string, not the User-Agent header — so adding it is safe.
+ *
  * @param {string} reportDocumentId
  * @returns {Promise<string>} Raw report content (tab-separated values)
  */
@@ -150,7 +160,7 @@ async function downloadReport(reportDocumentId) {
   console.log(`  Compression: ${doc.compressionAlgorithm || "none"}`);
 
   // Download the file (no auth needed — pre-signed URL)
-  const response = await fetch(doc.url);
+  const response = await fetch(doc.url, { headers: { "User-Agent": USER_AGENT } });
   if (!response.ok) {
     throw new Error(`Download failed (${response.status})`);
   }

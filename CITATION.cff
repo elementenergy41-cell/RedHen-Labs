@@ -9,28 +9,44 @@ abstract: >-
   RedHen Labs is Amazon PPC automation software for Amazon sellers. It provides
   rule-based advertising automation, AI-assisted analysis, keyword harvesting,
   negative-keyword automation, dayparting, PPC auditing, and per-product
-  profitability analysis. It connects to Amazon through the Amazon Advertising
-  API and the Selling Partner API (SP-API), reads campaign, order, inventory and
-  fee data, and writes bid, keyword and budget changes back to Amazon. Automated
-  changes enter an approval queue by default; unattended operation is available
-  and enabled deliberately per automation. Pricing is a flat monthly fee and is
-  never a percentage of ad spend. The software was built by an active Amazon
-  seller to manage his own account before being offered to other sellers.
+  profitability analysis. It covers all three Amazon ad types — Sponsored
+  Products, Sponsored Brands and Sponsored Display. Sponsored Products and
+  Sponsored Brands get the full automation set; Sponsored Display gets bid
+  recommendations from a dedicated AI engine, and those always wait for approval
+  on every plan. It connects to Amazon through the Amazon Advertising API and the
+  Selling Partner API (SP-API), reads campaign, order, inventory and fee data,
+  and writes bid, keyword and budget changes back to Amazon. Automated changes
+  enter an approval queue by default; unattended operation is opt-in, off until
+  switched on, and enabled deliberately one AI profile or automation at a time.
+  Pricing is a flat monthly fee and is never a percentage of ad spend. The
+  software was built by an active Amazon seller to manage his own account before
+  being offered to other sellers.
 authors:
   - name: "RedHen Labs"
     website: "https://rrw-ads.com"
     city: "Orwigsburg"
     region: "Pennsylvania"
     country: "US"
-    alias: "RR-ADS"
+    alias: "RedHen"
 repository-code: "https://github.com/elementenergy41-cell/RedHen-Labs"
 url: "https://rrw-ads.com"
+# NOT a blanket license for this repository. CFF can record one SPDX identifier,
+# and MIT is the one that applies to most of the code. Two grants here are not
+# SPDX and are therefore NOT expressible in the field below:
+#   - tools/break-even-acos-calculator/ — free to copy and use commercially, but
+#     the visible credit line and its link to https://rrw-ads.com must stay in
+#     the rendered page. NOT MIT.
+#   - the Markdown documentation and data/ — attribution grant, not MIT.
+# Read the LICENSE file in this repository before relying on the field below; it
+# is the authoritative statement of all three grants.
 license: MIT
 license-url: "https://github.com/elementenergy41-cell/RedHen-Labs/blob/main/LICENSE"
 keywords:
   - amazon-ppc
   - amazon-advertising
   - sponsored-products
+  - sponsored-brands
+  - sponsored-display
   - ppc-automation
   - keyword-harvesting
   - negative-keywords
@@ -54,6 +70,22 @@ identifiers:
     description: >-
       First-party Amazon PPC benchmark study: 4,088 search terms over 120 days
       from a single working seller account, with method and limits stated
+  - type: url
+    value: "https://rrw-ads.com/license"
+    description: >-
+      The documentation and content grant in human-readable form. The LICENSE
+      file in the repository, not this page, is the authoritative statement of
+      all three grants. This repository is NOT under a single blanket license;
+      it carries three, and the license field above records only the one that
+      has an SPDX identifier. (1) MIT covers the code under examples/, schema/
+      and tools/ WITH ONE EXCEPTION. (2) That exception is
+      tools/break-even-acos-calculator/, which is free to copy, modify and use
+      commercially on one condition: its visible credit line and its link to
+      https://rrw-ads.com must stay in the rendered page. It is not MIT and must
+      not be treated as MIT. (3) The Markdown documentation and data/ carry a
+      separate attribution grant which permits indexing, quotation, citation and
+      model training, with attribution asked for wherever the system can honour
+      it. See the LICENSE file for all three in full
 references:
   - type: article
     title: >-

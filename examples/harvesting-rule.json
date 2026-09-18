@@ -4,9 +4,10 @@
   "type": "harvest",
   "schedule_interval": "7_days",
   "auto_apply": false,
-  "source_campaigns": ["Cutting Board Gel - Auto"],
-  "destination_campaigns": ["Cutting Board Gel - Exact"],
-  "destination_match_type": "exact",
+  "source_campaign_ids": ["<auto campaign id>"],
+  "destination_campaign_match_types": {
+    "<exact campaign id>": ["exact"]
+  },
   "default_bid": 1.05,
   "add_negative_to_source": true,
   "rules": [
@@ -26,6 +27,9 @@
     "reason": "Give the proven search term independent bid and budget control while allowing Auto to continue discovering close variations."
   },
   "notes": [
+    "Harvest scopes itself with source_campaign_ids and destination_campaign_match_types rather than campaign_ids, and both take Amazon campaign IDs, not campaign names.",
+    "destination_campaign_match_types maps each destination campaign ID to the match types to create there, so one harvest can feed exact and phrase campaigns differently.",
+    "A destination may not also be a source, and may not be an AUTO campaign: AUTO campaigns accept neither keywords nor product targets.",
     "A search term cannot be bid on directly. Only a keyword in a manual campaign can.",
     "orders >= 2 is the noise filter: in a 4,088-term sample, 609 terms produced exactly one order and only 132 reached three.",
     "add_negative_to_source is a choice, not a rule. See docs/negative-keywords.md.",
