@@ -32,7 +32,7 @@ Many ad-automation tools price as a percentage of the ad spend they manage. That
 
 Agencies hand the work to a team — valuable if you want to be entirely hands-off. Their fee structures vary widely and there is no single norm worth quoting: a percentage of ad spend, a percentage of ad-attributed sales, a flat management fee, and a base plus a percentage are all common. What matters is what the fee works out to against the profit your advertising actually produces.
 
-**RedHen Labs gives you the management workflow without the agency markup, while you set the level of control.** Approve every change yourself, or authorize the automation to act on its own — the AI bid engine from Growth, and the rule engine as well on Professional. For sellers who want a professional setup but then to run it themselves, **Operator Setup** ($399 first month, then $129/mo) is the bridge: the team builds your campaign architecture, rules, and profit model and hands you a written 30-day operating runbook.
+**RedHen Labs gives you the management workflow without the agency markup, while you set the level of control.** Approve every change yourself, or authorize the automation to act on its own — the AI bid engine from Growth, and the rule engine as well on Professional. For sellers who would rather not run it themselves, **Managed** ($499/month, flat, by application, limited to 20 accounts) is the bridge: the team sets up your campaign architecture, rules and profit model in month one, then runs the account with you, with a 1-hour call and a written summary every month.
 
 ## RedHen Labs vs. spreadsheets
 
@@ -43,7 +43,7 @@ Spreadsheets are flexible and free, but they don't sync from Amazon, don't act o
 ## When RedHen Labs is *not* the right fit
 
 - You want one subscription that also covers deep product research and listing optimization → consider an all-in-one suite alongside or instead.
-- You want fully hands-off management and do not want to configure the system yourself → start with **Operator Setup**, which builds it for you and then runs on Professional, where the rule engine can act unattended. If you would rather nobody in-house touched it at all, a managed agency is the alternative.
+- You want fully hands-off management and do not want to configure the system yourself → apply for **Managed** ($499/month, flat, limited to 20 accounts): we set the account up in month one and then run it with you on the Professional platform, with a 1-hour call and a written summary every month. If you would rather nobody in-house touched it at all and need more than one marketplace or a large catalogue run end to end, a full-service agency is the alternative.
 - You want Sponsored Display run by rules rather than reviewed → Sponsored Display is supported — it syncs and reports on every plan, and on Growth and Professional it gets its own campaign table for pause, activate and daily budgets plus a dedicated AI engine that recommends its bids — but those recommendations always wait for your approval, and Sponsored Display sits deliberately outside the rule-based automations.
 - You need Amazon DSP or Amazon Marketing Cloud → RedHen Labs does neither.
 

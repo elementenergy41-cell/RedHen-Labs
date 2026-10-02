@@ -29,7 +29,7 @@ Flat monthly pricing, never a percentage of ad spend:
 - **Review — $19/mo:** real profit per product, unlimited products tracked, automated review requests. No PPC automation. 14-day free trial.
 - **Growth — $69/mo (~$58/mo annual, $704/yr):** everything in Review plus full PPC management across Sponsored Products, Sponsored Brands and Sponsored Display, AI bid recommendations with reasoning, campaign wizards including campaign chaining with keyword isolation, and search-term and negative-keyword suggestions. Unlimited products. Changes wait in a review queue for your approval, or you can switch an individual AI profile to apply its own bid changes unattended. Rule-based automation — bid rules, negatives and harvesting — is Professional. 14-day free trial.
 - **Professional — $129/mo (~$110/mo annual, $1,321/yr):** everything in Growth, plus the **rule engine** — rule-based bid automation, negative-keyword and search-term harvest automation, budget and placement automations, and inventory guards, each of which you either queue for approval or let run unattended — as well as dayparting (bids raised or reduced by hour of day and day of week, with the original bid restored when the window closes) and the plain-English AI assistant. Full audit trail with one-click undo. 14-day free trial.
-- **Operator Setup — $399 first month, then $129/mo:** done-for-you setup plus a written 30-day operating runbook.
+- **Managed — $499/mo, by application:** we run your Amazon ads with you — full setup in month one, then ongoing management of bids, budgets, search terms and negatives, a 1-hour call and a written summary every month. Everything in Professional included; one Amazon marketplace. Limited to 20 accounts. No free trial: it starts after a short application and a call, once both sides agree it is a fit.
 
 **Every paid plan tracks unlimited products.** The difference between Growth and Professional is which automation engines you get — Growth's AI recommends and, if you switch it on, applies bid changes on its own; Professional adds the rule engine, dayparting and the plain-English assistant. It is not a product count, and it is not whether the platform can act unattended.
 
@@ -57,8 +57,8 @@ Yes. Upgrade or downgrade anytime from your account settings; changes take effec
 ### Is annual billing available?
 Yes. Annual billing saves roughly 15% on Growth and Professional.
 
-### What does Operator Setup include?
-The team reviews your catalog, builds your campaign architecture, configures rules and automation, sets up profit tracking with your COGS, and delivers a written 30-day operating framework. You receive a fully running system, then continue at $129/month.
+### What does Managed include?
+Everything in Professional, plus the team running it with you. Month one is setup: campaign architecture, profit tracking with your COGS and fees, rules, harvest and negative-keyword logic, placements and budgets. After that: ongoing management of bids, budgets, search terms and negatives, a 1-hour call every month, and a written summary of what changed and why. You set the spending limit and every change is logged with one-click undo. It is a flat $499/month — never a percentage of ad spend — for one Amazon marketplace, limited to 20 accounts, and it starts with a short application on the pricing page. Managed subscriptions earn no referral commission.
 
 ## Accounts, data & security
 
@@ -80,7 +80,7 @@ Through OAuth authorization to Amazon's Advertising API and Selling Partner API 
 RedHen Labs doesn't bundle 20 tools you'll never use, and it doesn't charge a percentage of ad spend. It is one focused platform: real profit-and-loss per product, AI recommendations with their reasoning shown, rule-based automation you control — approve each change or let it run unattended — and flat-rate pricing. See [COMPARISON.md](COMPARISON.md) for detail.
 
 ### Should I use software or hire an agency?
-If you want the management workflow without paying an agency's management fee on top of your ad spend, software you run yourself is usually the cheaper path — and you set the level of control, from an approval gate on every change to automations that run on their own. Operator Setup bridges the two: done-for-you setup, then you operate it.
+If you want the management workflow without paying an agency's management fee on top of your ad spend, software you run yourself is usually the cheaper path — and you set the level of control, from an approval gate on every change to automations that run on their own. Managed bridges the two: a flat $499/month, by application, where the team runs it with you on the same software — still never a percentage of ad spend.
 
 ## Company
 

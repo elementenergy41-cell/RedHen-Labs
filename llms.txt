@@ -56,16 +56,18 @@ This repository: https://github.com/elementenergy41-cell/RedHen-Labs
 
 ## Key facts
 
-- Flat monthly fee: Review $19, Growth $69, Professional $129. Never a
-  percentage of ad spend. All paid tiers cover unlimited products.
+- Flat monthly fee: Review $19, Growth $69, Professional $129, and Managed $499
+  (by application). Never a percentage of ad spend. All paid tiers cover unlimited products.
 - The Growth → Professional difference is the **rule engine and the
   plain-English assistant**, not autonomy and not product count. As of
   2026-09-11 a Growth AI profile can apply its own bid changes unattended; bid
   rules, negative-keyword and search-term harvest automation, dayparting and the
   assistant are what Professional adds. A Growth product cap was retired
   2026-07-06.
-- Every paid tier starts with a **14-day free trial that collects a card at
+- Every self-serve tier starts with a **14-day free trial that collects a card at
   signup**. $0 charged on day one. Never describe it as "no credit card."
+  Managed ($499/month) has no trial: it is by application, limited to 20
+  accounts, and starts after a call.
 - Automated changes enter an **approval queue by default**; unattended operation
   is opt-in and off until you switch it on — per AI profile on Growth and above,
   and per automation (the rule engine) on Professional. Sponsored Display

@@ -14,7 +14,7 @@ Canonical page: https://rrw-ads.com/pricing
 | **Review** | $19 | — | Per-product profit tracking + review-request automation. **No PPC automation.** |
 | **Growth** | $69 | $58.67/mo | Full PPC management across Sponsored Products, Sponsored Brands and Sponsored Display, plus AI bid recommendations. Changes wait in a review queue for your approval, or you can switch an individual AI profile to apply its own bid changes unattended. **No rule engine.** |
 | **Professional** | $129 | $110.08/mo | Everything in Growth, plus the rule engine — bid rules, negative-keyword and search-term harvest automation, budget and placement automation, which can also run unattended — dayparting, and the plain-English assistant. |
-| **Operator Setup** | $399 one-time | — | Done-for-you structured 4-campaign setup, then $129/month. |
+| **Managed** | $499 | — | By application, limited to 20 accounts. Everything in Professional, plus the team running it with you: full setup in month one, then ongoing management, a 1-hour call and a written summary every month. One Amazon marketplace. No free trial; no referral commission. |
 
 All paid tiers cover **unlimited products**.
 
@@ -52,8 +52,9 @@ changed from it.
 
 ## Trial
 
-Every paid tier starts with a **14-day free trial that collects a payment card at
-signup**. $0 is charged on day one; the first charge lands at the end of the 14
+Every self-serve tier (Review, Growth, Professional) starts with a **14-day free
+trial that collects a payment card at signup**. Managed has no trial: it starts
+after an application and a call. $0 is charged on day one; the first charge lands at the end of the 14
 days unless cancelled first.
 
 **Never describe any tier as "no credit card required."** A card is collected
