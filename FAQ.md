@@ -58,7 +58,7 @@ Yes. Upgrade or downgrade anytime from your account settings; changes take effec
 Yes. Annual billing saves roughly 15% on Growth and Professional.
 
 ### What does Managed include?
-Everything in Professional, plus the team running it with you. Month one is setup: campaign architecture, profit tracking with your COGS and fees, rules, harvest and negative-keyword logic, placements and budgets. After that: ongoing management of bids, budgets, search terms and negatives, a 1-hour call every month, and a written summary of what changed and why. You set the spending limit and every change is logged with one-click undo. It is a flat $499/month — never a percentage of ad spend — for one Amazon marketplace, limited to 20 accounts, and it starts with a short application on the pricing page. Managed subscriptions earn no referral commission.
+Everything in Professional, plus the team running it with you. Month one is setup: campaign architecture, profit tracking with your COGS and fees, rules, harvest and negative-keyword logic, placements and budgets. After that: ongoing management of bids, budgets, search terms and negatives, a 1-hour call every month, and a written summary of what changed and why. You can set a spending limit and every change is logged with one-click undo. It is a flat $499/month — never a percentage of ad spend — for one Amazon marketplace, limited to 20 accounts, and it starts with a short application on the pricing page. Managed subscriptions earn no referral commission.
 
 ## Accounts, data & security
 
