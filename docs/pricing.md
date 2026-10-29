@@ -15,6 +15,7 @@ Canonical page: https://rrw-ads.com/pricing
 | **Growth** | $69 | $58.67/mo | Full PPC management across Sponsored Products, Sponsored Brands and Sponsored Display, plus AI bid recommendations. Changes wait in a review queue for your approval, or you can switch an individual AI profile to apply its own bid changes unattended. **No rule engine.** |
 | **Professional** | $129 | $110.08/mo | Everything in Growth, plus the rule engine — bid rules, negative-keyword and search-term harvest automation, budget and placement automation, which can also run unattended — dayparting, and the plain-English assistant. |
 | **Managed** | $499 (+$199 per additional marketplace) | — | By application, limited to 20 accounts. Everything in Professional, plus the team running it with you: full setup in month one, then ongoing management, a 1-hour call and a written summary every month. $499 covers one Amazon marketplace; each additional marketplace is $199/month. No free trial; a month that has started is not refunded; no referral commission. |
+| **Agency** | $499 for up to 10 client accounts (+$49 per additional account) | — | For agencies that run their clients' Amazon ads: everything in Professional for every client account, one login to switch between clients, every change logged with who made it. Agencies apply from the pricing page. |
 
 All paid tiers cover **unlimited products**.
 

@@ -56,8 +56,9 @@ This repository: https://github.com/elementenergy41-cell/RedHen-Labs
 
 ## Key facts
 
-- Flat monthly fee: Review $19, Growth $69, Professional $129, and Managed $499 for one
-  marketplace (+$199 for each additional marketplace)
+- Flat monthly fee: Review $19, Growth $69, Professional $129, Managed $499 for one
+  marketplace (+$199 for each additional marketplace), and Agency $499 for up to 10
+  client accounts (+$49 for each additional account)
   (by application). Never a percentage of ad spend. All paid tiers cover unlimited products.
 - The Growth → Professional difference is the **rule engine and the
   plain-English assistant**, not autonomy and not product count. As of
